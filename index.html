@@ -13,6 +13,7 @@
   import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
   import { getFirestore, collection, doc, setDoc, deleteDoc, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+  // REPLACE WITH YOUR FIREBASE CONFIG
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -244,7 +245,7 @@
     <div id="settingsLogin">
       <div class="login-title">🔒 Admin Login</div>
       <div class="login-sub">Enter your Firebase credentials</div>
-      <div class="field"><label>Email</label><input id="loginEmail" placeholder="admin@example.com" autocomplete="off" /></div>
+      <div class="field"><label>Email</label><input id="loginEmail" placeholder="ansientofficial@gmail.com" autocomplete="off" /></div>
       <div class="field"><label>Password</label><input id="loginPass" type="password" placeholder="Password" /></div>
       <div id="loginErr" class="err"></div>
       <div class="btn-row"><button class="btn btn-primary" onclick="doLogin()">Login</button></div>
@@ -613,13 +614,149 @@ function esc(s) {
 document.addEventListener("click", () => document.getElementById("discordDropdown").classList.remove("open"));
 document.addEventListener("keydown", e => { if (e.key === "Escape") { closeSettings(); closeModal(); closeProfile(); } });
 
-window.firebaseOnSnapshot = (ref, callback) => {
-  const unsub = ref.onSnapshot(callback);
-  window._firebaseUnsub = window._firebaseUnsub || [];
-  window._firebaseUnsub.push(unsub);
-  return unsub;
-};
+// ===== LOGIN/LOGOUT FUNCTIONS =====
+async function doLogin() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPass").value;
+  try {
+    const userCredential = await window.firebaseSignIn(window.firebaseAuth, email, password);
+    loggedInUser = userCredential.user.email;
+    document.getElementById("editingAs").textContent = loggedInUser;
+    document.getElementById("settingsLogin").style.display = "none";
+    document.getElementById("adminPanel").style.display = "block";
+    renderEditList();
+    document.getElementById("loginErr").textContent = "";
+  } catch (error) {
+    document.getElementById("loginErr").textContent = "Invalid email or password.";
+  }
+}
 
+function logout() {
+  window.firebaseSignOut(window.firebaseAuth);
+  loggedInUser = null;
+  document.getElementById("adminPanel").style.display = "none";
+  document.getElementById("settingsLogin").style.display = "block";
+  document.getElementById("loginPass").value = "";
+  document.getElementById("loginErr").textContent = "";
+}
+
+// ===== PLAYER MANAGEMENT FUNCTIONS =====
+async function addPlayer() {
+  if (!loggedInUser) return;
+  const name = document.getElementById("newName").value.trim();
+  if (!name) { document.getElementById("addErr").textContent = "Player name required."; return; }
+  if (players.find(p => p.name.toLowerCase() === name.toLowerCase())) {
+    document.getElementById("addErr").textContent = "Player already exists.";
+    return;
+  }
+  const addBtn = document.querySelector(".btn-add");
+  addBtn.disabled = true;
+  addBtn.textContent = "Checking...";
+  document.getElementById("addErr").textContent = "";
+  let resolvedName = name;
+  try {
+    const r = await fetch(`https://api.ashcon.app/mojang/v2/user/${encodeURIComponent(name)}`);
+    if (r.status === 404) throw new Error("Not found");
+    const data = await r.json();
+    if (!data || !data.uuid) throw new Error("Invalid");
+    if (data.username) resolvedName = data.username;
+    uuidCache[resolvedName.toLowerCase()] = data.uuid.replace(/-/g, "");
+  } catch(e) {
+    document.getElementById("addErr").textContent = `"${name}" is not a valid Minecraft account.`;
+    addBtn.disabled = false;
+    addBtn.textContent = "+ Add";
+    return;
+  }
+  const newPlayer = {
+    name: resolvedName,
+    region: document.getElementById("newRegion").value,
+    tiers: {
+      Sword: document.getElementById("newSword").value || null,
+      UHC: document.getElementById("newUHC").value || null,
+      SMP: document.getElementById("newSMP").value || null,
+      Mace: document.getElementById("newMace").value || null
+    }
+  };
+  const playersRef = window.firebaseCollection(window.firebaseDb, "players");
+  const newDocRef = window.firebaseDoc(playersRef, resolvedName.toLowerCase());
+  await window.firebaseSetDoc(newDocRef, newPlayer);
+  document.getElementById("newName").value = "";
+  document.getElementById("newSword").value = "";
+  document.getElementById("newUHC").value = "";
+  document.getElementById("newSMP").value = "";
+  document.getElementById("newMace").value = "";
+  addBtn.disabled = false;
+  addBtn.textContent = "+ Add";
+}
+
+async function deletePlayer(playerId) {
+  if (!loggedInUser) return;
+  const playerRef = window.firebaseDoc(window.firebaseDb, "players", playerId);
+  await window.firebaseDeleteDoc(playerRef);
+}
+
+function openEdit(playerId) {
+  const p = players.find(p => p.id === playerId);
+  if (!p) return;
+  editingIndex = playerId;
+  const opts = (tier) => ["","HT1","LT1","HT2","LT2","HT3","LT3","HT4","LT4","HT5","LT5"].map(v =>
+    `<option value="${v}" ${(p.tiers && p.tiers[tier]) === v ? "selected" : ""}>${v || "—"}</option>`
+  ).join("");
+  const regOpts = ["EU","AS","NA","SA","OC"].map(r => `<option ${p.region === r ? "selected" : ""}>${r}</option>`).join("");
+  showModal(`<h2>Edit Player</h2><p>Editing: <b style="color:var(--gold)">${esc(p.name)}</b></p>
+    <div class="field"><label>Region</label><select id="eRegion">${regOpts}</select></div>
+    <div class="field"><label>Sword</label><select id="eSword">${opts("Sword")}</select></div>
+    <div class="field"><label>UHC</label><select id="eUHC">${opts("UHC")}</select></div>
+    <div class="field"><label>SMP</label><select id="eSMP">${opts("SMP")}</select></div>
+    <div class="field"><label>Mace</label><select id="eMace">${opts("Mace")}</select></div>
+    <div class="btn-row"><button class="btn btn-cancel" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveEdit()">Save</button></div>`);
+}
+
+async function saveEdit() {
+  const playerRef = window.firebaseDoc(window.firebaseDb, "players", editingIndex);
+  const p = players.find(p => p.id === editingIndex);
+  const updatedPlayer = {
+    ...p,
+    region: document.getElementById("eRegion").value,
+    tiers: {
+      Sword: document.getElementById("eSword").value || null,
+      UHC: document.getElementById("eUHC").value || null,
+      SMP: document.getElementById("eSMP").value || null,
+      Mace: document.getElementById("eMace").value || null
+    }
+  };
+  await window.firebaseSetDoc(playerRef, updatedPlayer);
+  closeModal();
+}
+
+function renderEditList() {
+  const el = document.getElementById("playerEditList");
+  if (!players.length) { el.innerHTML = ""; return; }
+  el.innerHTML = `<div style="font-size:22px;color:var(--sub);margin-bottom:12px;">Existing players (${players.length})</div>` +
+    players.map((p,i) => `<div class="player-edit-row">
+      <div class="pname">${esc(p.name)}</div>
+      <div style="font-size:22px;color:var(--sub);">${p.region || "EU"}</div>
+      <div style="font-size:22px;">${Object.entries(p.tiers || {}).filter(([,v])=>v).map(([k,v])=>`${v}`).join(" ")}</div>
+      <button class="btn-edit-ico" onclick="openEdit('${p.id}')">✎ Edit</button>
+      <button class="btn-del-ico" onclick="deletePlayer('${p.id}')">✕</button>
+    </div>`).join("");
+}
+
+// ===== UI HELPER FUNCTIONS =====
+function showModal(html) {
+  document.getElementById("modalBox").innerHTML = html;
+  document.getElementById("overlay").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("overlay").style.display = "none";
+}
+
+function esc(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+// Initialize Firebase listeners
 loadPlayersFromFirebase();
 </script>
 </body>
