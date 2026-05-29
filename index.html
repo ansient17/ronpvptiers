@@ -402,9 +402,9 @@ function handleSettingsOverlayClick(e){
 
 function skinHTML(name, size){
   const uuid = uuidCache[name.toLowerCase()] || "";
-  const noSkin = `<div style="width:${Math.round(size*0.55)}px;height:${size}px;background:#111;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#555;font-size:${Math.round(size*0.3)}px;font-weight:700;">✕</div>`;
-  if(!uuid) return noSkin;
-  return `<img src="https://crafatar.com/renders/body/${uuid}?overlay" alt="" loading="lazy" style="height:${size}px;width:auto;image-rendering:pixelated;" onerror="this.outerHTML='${noSkin.replace(/'/g,"\\'")}'"/>`;
+  const noSkin = `<div style="width:${Math.round(size*0.55)}px;height:${size}px;background:#111;border-radius:4px;"></div>`;
+
+  return `<img src="https://minotar.net/body/${name}/${size}" alt="" loading="lazy" style="height:${size}px;width:auto;image-rendering:pixelated;" onerror="this.style.display='none'"/>`;
 }
 
 function renderBoard(){
