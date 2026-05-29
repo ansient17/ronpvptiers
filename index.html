@@ -197,6 +197,20 @@ let currentTab = "Overall";
 let loggedInUser = null;
 let players = [];
 let editingIndex = null;
+let uuidCache = {};
+
+async function fetchUUIDs(){
+  const names = players.map(p=>p.name).filter(n=>!uuidCache[n.toLowerCase()]);
+  for(const name of names){
+    try{
+      const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent("https://api.mojang.com/users/profiles/minecraft/"+name)}`);
+      const j = await r.json();
+      const data = JSON.parse(j.contents);
+      if(data && data.id) uuidCache[name.toLowerCase()] = data.id;
+    }catch(e){}
+  }
+  renderBoard();
+}
 
 async function hashPassword(p){
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(p));
@@ -209,6 +223,7 @@ function loadPlayers(){
     if(data) players = JSON.parse(data);
   }catch(e){ players=[]; }
   renderBoard();
+  fetchUUIDs();
 }
 
 function savePlayers(){
@@ -249,10 +264,14 @@ function renderBoard(){
     const tierKeys = currentTab==="Overall" ? ["Sword","UHC","SMP","Mace"] : [currentTab];
     const categoryEmoji = {Sword:"⚔️",UHC:"❤️",SMP:"💀",Mace:"🔨"};
     const badges = tierKeys.filter(k=>p.tiers[k]).map(k=>`<span class="tier-badge ${p.tiers[k].toLowerCase()}">${p.tiers[k]}<span style="font-size:18px;margin-left:4px;">${categoryEmoji[k]}</span></span>`).join("");
+    const uuid = uuidCache[p.name.toLowerCase()] || "";
+    const skinImg = uuid
+      ? `<img src="https://crafatar.com/renders/body/${uuid}?overlay" alt="" loading="lazy" onerror="this.style.opacity=0" />`
+      : `<div style="width:40px;height:68px;background:#111;border-radius:4px;opacity:0.3;"></div>`;
     return `<div class="player-row">
       <div class="${rankCls}">#${i+1}</div>
-      <div class="skin-wrap"><img src="https://crafatar.com/renders/body/${esc(p.name)}?overlay" alt="" loading="lazy" onerror="this.style.opacity=0" /></div>
-      <div class="player-name"><a href="https://namemc.com/profile/${esc(p.name)}" target="_blank" style="color:inherit;text-decoration:none;" onmouseover="this.style.color='#f6b327'" onmouseout="this.style.color=''">${esc(p.name)}</a></div>
+      <div class="skin-wrap">${skinImg}</div>
+      <div class="player-name"><a href="https://namemc.com/profile/${esc(p.name)}" target="_blank" style="color:inherit;text-decoration:none;" onmouseover="this.style.color='#f6b327'" onmouseout="this.style.color='#ffffff'">${esc(p.name)}</a></div>
       <div class="region">${esc(p.region)}</div>
       <div class="tiers">${badges||'<span style="color:#333;font-size:24px;">—</span>'}</div>
     </div>`;
@@ -332,7 +351,7 @@ function addPlayer(){
     const el=document.getElementById(id); if(el) el.value="";
   });
   savePlayers();
-  renderBoard();
+  fetchUUIDs();
   renderEditList();
 }
 
