@@ -108,7 +108,6 @@
   .point{background:#111;border-radius:14px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:24px;}
   .point b{font-weight:800;}
 
-  /* ── Settings overlay (blur backdrop) ── */
   .settings-overlay{
     position:fixed;inset:0;z-index:300;
     display:none;
@@ -136,7 +135,6 @@
   }
   .settings-close:hover{border-color:#666;color:#fff;}
 
-  /* admin panel inside the overlay */
   .admin-panel{background:#000;border:1px solid var(--gold);border-radius:24px;padding:28px;margin-bottom:20px;}
   .admin-panel-title{font-size:34px;font-weight:800;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:12px;}
   .ap-row{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;}
@@ -154,7 +152,6 @@
   .btn-del-ico{background:transparent;border:1px solid #330000;border-radius:10px;color:#ff5555;font-size:22px;padding:8px 16px;cursor:pointer;}
   .btn-del-ico:hover{background:#200000;}
 
-  /* login form inside overlay */
   .login-title{font-size:42px;font-weight:800;margin-bottom:10px;}
   .login-sub{color:var(--sub);font-size:26px;margin-bottom:36px;}
   .field{margin-bottom:22px;}
@@ -169,7 +166,6 @@
   .btn-cancel:hover{border-color:#666;color:#fff;}
   .err{color:#ff5555;font-size:22px;margin-top:10px;}
 
-  /* edit modal */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:400;display:flex;align-items:center;justify-content:center;}
   .modal{background:#0f0f0f;border:1px solid var(--border);border-radius:28px;padding:50px;width:700px;max-width:90vw;}
   .modal h2{font-size:42px;font-weight:800;margin-bottom:10px;}
@@ -183,13 +179,11 @@
 <div class="topbar">
   <div class="logo" onclick="document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab')[0].classList.add('active');currentTab='Overall';renderBoard();" style="cursor:pointer;">RONSMP RANKED</div>
   <div class="topbar-right">
-    <!-- Settings button -->
     <button class="settings-btn" id="settingsBtn" onclick="openSettings(event)" title="Settings">
       <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
         <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
       </svg>
     </button>
-    <!-- Discord button -->
     <div style="position:relative;">
       <button class="discord-btn" id="discordToggle" onclick="toggleDiscord(event)">
         <svg viewBox="0 0 24 24" width="28" height="28" fill="#5865F2" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.033.056a19.909 19.909 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
@@ -222,7 +216,6 @@
   <div class="tab" onclick="setTab(this,'Mace')"><div class="icon">🔨</div><h2>Mace</h2></div>
 </div>
 
-<!-- OVERALL view -->
 <div id="overallView" class="main">
   <div class="board">
     <div class="headers"><div>#</div><div></div><div>PLAYER</div><div>REGION</div><div>POINTS</div><div>TIERS</div></div>
@@ -243,19 +236,16 @@
   </div>
 </div>
 
-<!-- CATEGORY tier-column view -->
 <div id="categoryView" style="display:none;">
   <div class="board" style="border-radius:24px;overflow:hidden;">
     <div id="tierColsBody" class="tier-view"></div>
   </div>
 </div>
 
-<!-- SETTINGS blur overlay -->
 <div class="settings-overlay" id="settingsOverlay" onclick="handleSettingsOverlayClick(event)">
   <div class="settings-modal" id="settingsModal">
     <button class="settings-close" onclick="closeSettings()">✕</button>
 
-    <!-- Login form -->
     <div id="settingsLogin">
       <div class="login-title">🔒 Admin Login</div>
       <div class="login-sub">Enter your whitelisted credentials to access the admin panel.</div>
@@ -267,7 +257,6 @@
       </div>
     </div>
 
-    <!-- Admin panel (shown when logged in) -->
     <div id="adminPanel" style="display:none;max-height:80vh;overflow-y:auto;">
       <div class="admin-panel">
         <div class="admin-panel-title">⚙ Admin Panel — editing as <span id="editingAs" style="color:#fff;margin-left:8px;"></span>
@@ -319,7 +308,6 @@
   </div>
 </div>
 
-<!-- Edit player modal (above settings overlay) -->
 <div class="overlay" id="overlay" style="display:none;">
   <div class="modal" id="modalBox"></div>
 </div>
@@ -385,7 +373,6 @@ function openSettings(e){
   e && e.stopPropagation();
   document.getElementById("settingsBtn").classList.add("active");
   document.getElementById("settingsOverlay").classList.add("open");
-  // show correct panel
   document.getElementById("settingsLogin").style.display = loggedInUser ? "none" : "block";
   document.getElementById("adminPanel").style.display    = loggedInUser ? "block" : "none";
   if(loggedInUser) renderEditList();
@@ -401,9 +388,6 @@ function handleSettingsOverlayClick(e){
 }
 
 function skinHTML(name, size){
-  const uuid = uuidCache[name.toLowerCase()] || "";
-  const noSkin = `<div style="width:${Math.round(size*0.55)}px;height:${size}px;background:#111;border-radius:4px;"></div>`;
-
   return `<img src="https://minotar.net/body/${name}/${size}" alt="" loading="lazy" style="height:${size}px;width:auto;image-rendering:pixelated;" onerror="this.style.display='none'"/>`;
 }
 
@@ -474,10 +458,10 @@ function renderCategoryTiers(cat){
     const total = htList.length + ltList.length;
     const htSection = htList.length > 0
       ? `<div class="tier-sub-label"><span class="ht-label-${n}">HT${n}</span><span class="sub-count">${htList.length}</span></div>${makeRows(htList, true)}`
-      : `<div class="tier-sub-label"><span class="ht-label-${n}" style="opacity:.3">HT${n}</span><span class="sub-count" style="opacity:.3">0</span></div>`;
+      : `<div class="tier-sub-label"><span class="ht-label-${n}">HT${n}</span><span class="sub-count">0</span></div>`;
     const ltSection = ltList.length > 0
       ? `<div class="tier-sub-label tier-lt-divider"><span class="lt-label-${n}">LT${n}</span><span class="sub-count">${ltList.length}</span></div>${makeRows(ltList, false)}`
-      : `<div class="tier-sub-label tier-lt-divider"><span class="lt-label-${n}" style="opacity:.3">LT${n}</span><span class="sub-count" style="opacity:.3">0</span></div>`;
+      : `<div class="tier-sub-label tier-lt-divider"><span class="lt-label-${n}">LT${n}</span><span class="sub-count">0</span></div>`;
     return `<div class="tier-col tcol-${n}">
       <div class="tier-col-header">
         <span class="tier-col-title">Tier ${n}</span>
@@ -530,7 +514,6 @@ async function addPlayer(){
     document.getElementById("addErr").textContent="Player already exists."; return;
   }
 
-  // Validate the username is a real MC account via Minetools
   const addBtn = document.querySelector(".btn-add");
   addBtn.disabled = true;
   addBtn.textContent = "Checking...";
@@ -548,7 +531,6 @@ async function addPlayer(){
       document.getElementById("addErr").textContent = `"${name}" is not a valid Minecraft account.`;
       addBtn.disabled = false; addBtn.textContent = "+ Add"; return;
     }
-    // Use the correctly-cased name returned by the API
     if(data.username) resolvedName = data.username;
     uuidCache[resolvedName.toLowerCase()] = data.uuid.replace(/-/g,"");
   } catch(e) {
