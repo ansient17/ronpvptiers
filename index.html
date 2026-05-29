@@ -93,10 +93,7 @@
     z-index:1;
     height:80px;
     width:auto;
-    image-rendering:pixelated;
     margin-top:2px;
-    transform: perspective(120px) rotateY(-22deg) rotateX(4deg) skewY(-2deg);
-    filter: drop-shadow(-4px 4px 6px rgba(0,0,0,0.6));
     transform-origin: center bottom;
   }
 
@@ -352,7 +349,7 @@ function closeSettings(){document.getElementById("settingsOverlay").classList.re
 function handleSettingsOverlayClick(e){if(e.target===document.getElementById("settingsOverlay"))closeSettings();}
 
 function skinHTML(name,size){
-  return `<img src="https://minotar.net/body/${name}/${size}" alt="" loading="lazy" style="height:${size}px;width:auto;image-rendering:pixelated;" onerror="this.style.display='none'"/>`;
+  return `<img src="https://visage.surgeplay.com/full/${size}/${name}?y=340&x=5" alt="" loading="lazy" style="height:${size}px;width:auto;" onerror="this.style.display='none'"/>`;
 }
 
 /* Chevron badge for top 3 */
