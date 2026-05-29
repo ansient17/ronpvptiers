@@ -1,13 +1,212 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Minecraft Tierlist</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minecraft Tier List</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #07111f;
+      color: white;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .topbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      background: #101c2f;
+      border: 1px solid #1f3352;
+      padding: 12px 20px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: 0.2s;
+      font-weight: bold;
+    }
+
+    .tab:hover,
+    .tab.active {
+      background: #182842;
+      transform: translateY(-2px);
+    }
+
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .tier-column {
+      background: #101c2f;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid #1f3352;
+      box-shadow: 0 0 20px rgba(0,0,0,0.25);
+    }
+
+    .tier-header {
+      padding: 16px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .gold { background: linear-gradient(90deg, #7c5b10, #b88a1d); }
+    .silver { background: linear-gradient(90deg, #555c69, #8993a3); }
+    .bronze { background: linear-gradient(90deg, #5f341f, #a85d35); }
+    .blue { background: linear-gradient(90deg, #123152, #24548b); }
+    .gray { background: linear-gradient(90deg, #353535, #5e5e5e); }
+
+    .player-list {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 500px;
+    }
+
+    .player {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #16253c;
+      padding: 10px;
+      border-radius: 12px;
+      cursor: grab;
+      transition: 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .player:hover {
+      border-color: #4c74b5;
+      transform: scale(1.02);
+    }
+
+    .player img {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+    }
+
+    .footer {
+      margin-top: 20px;
+      opacity: 0.7;
+      text-align: center;
+    }
+  </style>
 </head>
+<body>
+  <div class="topbar">
+    <div class="tab active">🏆 Overall</div>
+    <div class="tab">⚔ LTMs</div>
+    <div class="tab">🛡 Vanilla</div>
+    <div class="tab">❤ UHC</div>
+    <div class="tab">🧪 Pot</div>
+    <div class="tab">☠ SMP</div>
+  </div>
 
-<body style="background:#07111f;color:white;font-family:Arial;text-align:center;padding-top:100px;">
+  <div class="tier-grid">
+    <div class="tier-column">
+      <div class="tier-header gold">Tier 1</div>
+      <div class="player-list" id="tier1">
+        <div class="player" draggable="true">
+          <img src="https://mc-heads.net/avatar/Technoblade" />
+          <span>Technoblade</span>
+        </div>
+        <div class="player" draggable="true">
+          <img src="https://mc-heads.net/avatar/Dream" />
+          <span>Dream</span>
+        </div>
+      </div>
+    </div>
 
-<h1>Minecraft Tierlist Website</h1>
-<p>GitHub Pages is working!</p>
+    <div class="tier-column">
+      <div class="tier-header silver">Tier 2</div>
+      <div class="player-list" id="tier2">
+        <div class="player" draggable="true">
+          <img src="https://mc-heads.net/avatar/Sapnap" />
+          <span>Sapnap</span>
+        </div>
+        <div class="player" draggable="true">
+          <img src="https://mc-heads.net/avatar/GeorgeNotFound" />
+          <span>GeorgeNotFound</span>
+        </div>
+      </div>
+    </div>
 
+    <div class="tier-column">
+      <div class="tier-header bronze">Tier 3</div>
+      <div class="player-list" id="tier3">
+        <div class="player" draggable="true">
+          <img src="https://mc-heads.net/avatar/TommyInnit" />
+          <span>TommyInnit</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier-column">
+      <div class="tier-header blue">Tier 4</div>
+      <div class="player-list" id="tier4">
+        <div class="player" draggable="true">
+          <img src="https://mc-heads.net/avatar/BadBoyHalo" />
+          <span>BadBoyHalo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier-column">
+      <div class="tier-header gray">Tier 5</div>
+      <div class="player-list" id="tier5">
+        <div class="player" draggable="true">
+          <img src="https://mc-heads.net/avatar/Skeppy" />
+          <span>Skeppy</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Drag players between tiers • Ready for GitHub Pages
+  </div>
+
+  <script>
+    const players = document.querySelectorAll('.player');
+    const lists = document.querySelectorAll('.player-list');
+
+    let dragged = null;
+
+    players.forEach(player => {
+      player.addEventListener('dragstart', () => {
+        dragged = player;
+        setTimeout(() => player.style.display = 'none', 0);
+      });
+
+      player.addEventListener('dragend', () => {
+        player.style.display = 'flex';
+      });
+    });
+
+    lists.forEach(list => {
+      list.addEventListener('dragover', e => {
+        e.preventDefault();
+      });
+
+      list.addEventListener('drop', () => {
+        list.appendChild(dragged);
+      });
+    });
+  </script>
 </body>
 </html>
