@@ -206,6 +206,32 @@
   .modal h2{font-size:42px;font-weight:800;margin-bottom:10px;}
   .modal p{color:var(--sub);font-size:26px;margin-bottom:36px;}
   select option{background:#0f0f0f;}
+
+  /* ── Player Profile Modal ── */
+  .profile-overlay{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(0,0,0,.65);}
+  .profile-overlay.open{display:flex;}
+  .profile-modal{background:#0f0f0f;border:1px solid var(--border);border-radius:28px;width:860px;max-width:92vw;position:relative;box-shadow:0 28px 80px rgba(0,0,0,.85);overflow:hidden;animation:profileIn .18s ease;}
+  @keyframes profileIn{from{transform:scale(.94);opacity:0;}to{transform:scale(1);opacity:1;}}
+  .profile-close{position:absolute;top:24px;right:28px;background:#1a1a1a;border:1px solid var(--border);border-radius:50%;color:#888;font-size:26px;width:52px;height:52px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;line-height:1;z-index:10;}
+  .profile-close:hover{border-color:#888;color:#fff;background:#222;}
+  .profile-header{display:flex;flex-direction:column;align-items:center;padding:60px 60px 36px;gap:20px;border-bottom:1px solid var(--border);}
+  .profile-avatar-wrap{position:relative;width:190px;height:190px;border-radius:50%;border:3px solid var(--gold);overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .profile-avatar-wrap img{height:175px;width:auto;image-rendering:pixelated;}
+  .profile-name{font-size:68px;font-weight:800;text-align:center;}
+  .profile-region{font-size:26px;color:var(--sub);text-align:center;}
+  .profile-namemc{display:inline-flex;align-items:center;gap:10px;background:#111;border:1px solid var(--border);border-radius:12px;padding:8px 20px;font-size:22px;color:var(--sub);text-decoration:none;transition:.15s;}
+  .profile-namemc:hover{border-color:#888;color:#fff;}
+  .profile-body{padding:40px 60px 50px;}
+  .profile-section-title{font-size:28px;font-weight:800;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;}
+  .profile-position-pill{display:inline-flex;align-items:center;gap:16px;background:linear-gradient(90deg,rgba(246,179,39,.15),rgba(246,179,39,.04));border:1px solid rgba(246,179,39,.3);border-radius:16px;padding:20px 30px;font-size:34px;font-weight:800;width:100%;margin-bottom:36px;}
+  .profile-position-num{font-size:48px;font-weight:900;color:var(--gold);}
+  .profile-position-label{color:#fff;}
+  .profile-position-pts{color:var(--sub);font-size:28px;font-weight:600;margin-left:auto;}
+  .profile-tiers-grid{display:flex;flex-wrap:wrap;gap:16px;}
+  .profile-tier-item{display:flex;flex-direction:column;align-items:center;gap:8px;background:#111;border:1px solid var(--border);border-radius:16px;padding:16px 22px;min-width:130px;}
+  .profile-tier-icon{font-size:32px;}
+  .profile-tier-cat{font-size:20px;color:var(--sub);font-weight:600;}
+  .profile-tier-val{font-size:28px;font-weight:800;}
 </style>
 </head>
 <body>
@@ -265,6 +291,15 @@
 <div id="categoryView" style="display:none;">
   <div class="board" style="border-radius:24px;overflow:hidden;">
     <div id="tierColsBody" class="tier-view"></div>
+  </div>
+</div>
+
+<!-- Player Profile Modal -->
+<div class="profile-overlay" id="profileOverlay" onclick="if(event.target===this)closeProfile()">
+  <div class="profile-modal" id="profileModal">
+    <button class="profile-close" onclick="closeProfile()">✕</button>
+    <div class="profile-header" id="profileHeader"></div>
+    <div class="profile-body" id="profileBody"></div>
   </div>
 </div>
 
@@ -398,7 +433,7 @@ function renderOverall(){
     return `<div class="${rowCls}">
       <div class="${rankCls}">#${i+1}</div>
       ${skinCol}
-      <div class="player-name"><a href="https://namemc.com/profile/${esc(p.name)}" target="_blank" style="color:inherit;text-decoration:none;" onmouseover="this.style.color='#f6b327'" onmouseout="this.style.color='#ffffff'">${esc(p.name)}</a></div>
+      <div class="player-name"><a href="#" onclick="event.preventDefault();openProfile('${esc(p.name).replace(/'/g,"\\'")}');" style="color:inherit;text-decoration:none;cursor:pointer;" onmouseover="this.style.color='#f6b327'" onmouseout="this.style.color='#ffffff'">${esc(p.name)}</a></div>
       <div class="region">${esc(p.region)}</div>
       <div class="points-col">${pts}</div>
       <div class="tiers">${badges||'<span style="color:#333;font-size:24px;">—</span>'}</div>
@@ -422,7 +457,7 @@ function renderCategoryTiers(cat){
   const makeRow=(p,isHT)=>`<div class="tier-player-item ${isHT?'is-ht':'is-lt'}">
     <div class="tier-player-skin">${skinHTML(p.name,46)}</div>
     <div class="tier-player-name">
-      <a href="https://namemc.com/profile/${esc(p.name)}" target="_blank" style="text-decoration:none;">${esc(p.name)}</a>
+      <a href="#" onclick="event.preventDefault();openProfile('${esc(p.name).replace(/'/g,"\\'")}');" style="text-decoration:none;cursor:pointer;">${esc(p.name)}</a>
     </div>
     ${isHT?htChevron:ltChevron}
   </div>`;
@@ -523,9 +558,60 @@ function saveEdit(){
 }
 function showModal(html){document.getElementById("modalBox").innerHTML=html;document.getElementById("overlay").style.display="flex";}
 function closeModal(){document.getElementById("overlay").style.display="none";}
+
+/* ── Player Profile Modal ── */
+function openProfile(name){
+  const p=players.find(pl=>pl.name===name);
+  if(!p)return;
+  const pts=calcScore(p);
+  const sorted=[...players].sort((a,b)=>calcScore(b)-calcScore(a));
+  const rank=sorted.findIndex(pl=>pl.name===name)+1;
+  const rankLabel=rank===1?"🥇 #1 Overall":rank===2?"🥈 #2 Overall":rank===3?"🥉 #3 Overall":`#${rank} Overall`;
+  const rankClass=["Combat Master","Combat Master","Combat Master","Combat Ace","Combat Ace","Combat Ace","Ranked","Ranked"];
+  const rankTitle=pts>=300?"Combat Master":pts>=200?"Combat Ace":pts>=100?"Ranked":"Challenger";
+  const rankColors={["Combat Master"]:"color:#f6b327;background:#1a1400;border-color:rgba(246,179,39,.5);",["Combat Ace"]:"color:#5b8ad4;background:#0a0f1a;border-color:rgba(91,138,212,.5);",["Ranked"]:"color:#6aaa6a;background:#0a130a;border-color:rgba(106,170,106,.5);",["Challenger"]:"color:#888;background:#111;border-color:#333;"};
+  const badgeStyle=rankColors[rankTitle]||rankColors["Challenger"];
+  const catEmoji={Sword:"⚔️",UHC:"❤️",SMP:"💀",Mace:"🔨"};
+  const tierColorMap={HT1:"#F7C725",LT1:"#C7A63C",HT2:"#5b58ff",LT2:"#7b79e0",HT3:"#ff9d47",LT3:"#ffb14a",HT4:"#e03030",LT4:"#a02020",HT5:"#aaaaaa",LT5:"#606060"};
+
+  document.getElementById("profileHeader").innerHTML=`
+    <div class="profile-avatar-wrap">
+      <img src="https://mc-heads.net/body/${encodeURIComponent(name)}/100" alt="" onerror="this.style.display='none'"/>
+    </div>
+    <div class="profile-name">${esc(name)}</div>
+    <div class="profile-region">${esc(p.region)}</div>
+    <a href="https://namemc.com/profile/${encodeURIComponent(name)}" target="_blank" class="profile-namemc">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      NameMC ↗
+    </a>`;
+
+  const tiersHtml=["Sword","UHC","SMP","Mace"].map(cat=>{
+    const val=p.tiers[cat];
+    const col=val?tierColorMap[val]:"#333";
+    return `<div class="profile-tier-item">
+      <div class="profile-tier-icon">${catEmoji[cat]}</div>
+      <div class="profile-tier-cat">${cat}</div>
+      <div class="profile-tier-val" style="color:${col}">${val||"—"}</div>
+    </div>`;
+  }).join("");
+
+  document.getElementById("profileBody").innerHTML=`
+    <div class="profile-section-title">Position</div>
+    <div class="profile-position-pill">
+      <span class="profile-position-num">${rank <= 3 ? ["🥇","🥈","🥉"][rank-1] : "#"+rank}</span>
+      <span class="profile-position-label">OVERALL</span>
+      <span class="profile-position-pts">${pts} points</span>
+    </div>
+    <div class="profile-section-title">Tiers</div>
+    <div class="profile-tiers-grid">${tiersHtml}</div>`;
+
+  document.getElementById("profileOverlay").classList.add("open");
+}
+function closeProfile(){document.getElementById("profileOverlay").classList.remove("open");}
+
 document.getElementById("overlay").addEventListener("click",function(e){if(e.target===this)closeModal();});
 document.addEventListener("keydown",e=>{
-  if(e.key==="Escape"){closeSettings();closeModal();}
+  if(e.key==="Escape"){closeSettings();closeModal();closeProfile();}
   if(e.key==="Enter"&&document.getElementById("settingsOverlay").classList.contains("open")&&!loggedInUser)doLogin();
 });
 function toggleDiscord(e){e.stopPropagation();document.getElementById("discordDropdown").classList.toggle("open");}
