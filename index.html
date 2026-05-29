@@ -47,11 +47,9 @@
   .board{background:#000;border:1px solid var(--border);border-radius:24px;min-height:680px;overflow:hidden;}
   .headers{display:grid;grid-template-columns:80px 100px 1fr 160px 140px 1fr;padding:26px 32px;color:var(--muted);font-size:30px;font-weight:600;border-bottom:1px solid var(--border);}
 
-  /* ── Standard player row ── */
   .player-row{display:grid;grid-template-columns:80px 100px 1fr 160px 140px 1fr;padding:12px 32px;border-bottom:1px solid #0d0d0d;align-items:center;transition:.15s;}
   .player-row:hover{background:#0d0d0d;}
 
-  /* ── Top-3 podium rows ── */
   .player-row.top1{background:linear-gradient(90deg,rgba(255,215,0,.10) 0%,transparent 60%);border-bottom:1px solid rgba(255,215,0,.12);}
   .player-row.top2{background:linear-gradient(90deg,rgba(192,192,192,.08) 0%,transparent 60%);border-bottom:1px solid rgba(192,192,192,.10);}
   .player-row.top3{background:linear-gradient(90deg,rgba(205,127,50,.08) 0%,transparent 60%);border-bottom:1px solid rgba(205,127,50,.10);}
@@ -59,13 +57,11 @@
   .player-row.top2:hover{background:linear-gradient(90deg,rgba(192,192,192,.13) 0%,transparent 60%);}
   .player-row.top3:hover{background:linear-gradient(90deg,rgba(205,127,50,.13) 0%,transparent 60%);}
 
-  /* rank number */
   .rank{font-size:32px;font-weight:800;color:var(--muted);}
   .rank.r1{color:#FFD700;}
   .rank.r2{color:#C0C0C0;}
   .rank.r3{color:#CD7F32;}
 
-  /* ── Chevron skin badge (top 3) ── */
   .skin-chevron{
     position:relative;
     width:72px;
@@ -76,7 +72,6 @@
     flex-shrink:0;
     overflow:visible;
   }
-  /* coloured background shape: rectangle + downward point */
   .skin-chevron::before{
     content:"";
     position:absolute;
@@ -97,7 +92,6 @@
     transform-origin: center bottom;
   }
 
-  /* plain skin wrap for rank 4+ */
   .skin-wrap{width:72px;height:88px;display:flex;align-items:center;justify-content:center;}
   .skin-wrap img{height:72px;width:auto;image-rendering:pixelated;}
 
@@ -107,41 +101,59 @@
   .tiers{display:flex;gap:10px;flex-wrap:wrap;}
   .tier-badge{font-size:22px;font-weight:700;padding:4px 14px;border-radius:8px;background:#111;}
 
-  /* ── Category tier-column view ── */
+  /* ── Category tier-column view (reference-image style) ── */
   .tier-view{display:flex;gap:0;width:100%;}
-  .tier-col{flex:1;border-right:1px solid var(--border);min-height:680px;}
+  .tier-col{flex:1;border-right:1px solid var(--border);min-height:680px;display:flex;flex-direction:column;}
   .tier-col:last-child{border-right:none;}
-  .tier-col-header{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
-  .tier-col-title{font-size:34px;font-weight:800;}
-  .tier-col-count{font-size:22px;color:var(--sub);font-weight:600;margin-left:auto;}
-  .tier-sub-label{display:flex;align-items:center;gap:10px;padding:10px 18px 8px;border-bottom:1px solid #181818;}
-  .tier-sub-label span{font-size:22px;font-weight:800;}
-  .tier-sub-label .sub-count{font-size:20px;color:var(--sub);font-weight:600;margin-left:auto;}
-  .tier-lt-divider{border-top:1px dashed #222;margin:0;}
-  .tcol-1 .tier-col-title{color:#F7C725;}
-  .tcol-2 .tier-col-title{color:#5b58ff;}
-  .tcol-3 .tier-col-title{color:#ff9d47;}
-  .tcol-4 .tier-col-title{color:#e03030;}
-  .tcol-5 .tier-col-title{color:#8a8a8a;}
-  .tcol-1{border-left:3px solid #F7C725 !important;}
-  .tcol-2{border-left:3px solid #5b58ff !important;}
-  .tcol-3{border-left:3px solid #ff9d47 !important;}
-  .tcol-4{border-left:3px solid #e03030 !important;}
-  .tcol-5{border-left:3px solid #8a8a8a !important;}
-  .ht-label-1{color:#F7C725;} .ht-label-2{color:#5b58ff;}
-  .ht-label-3{color:#ff9d47;} .ht-label-4{color:#e03030;} .ht-label-5{color:#aaaaaa;}
-  .lt-label-1{color:#8a7020;} .lt-label-2{color:#3a38a0;}
-  .lt-label-3{color:#a06030;} .lt-label-4{color:#802020;} .lt-label-5{color:#606060;}
-  .tier-player-item{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid #0d0d0d;transition:.15s;}
+
+  /* Column header with trophy icon + coloured title */
+  .tier-col-header{padding:18px 18px 14px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:10px;}
+  .tier-col-trophy{font-size:30px;flex-shrink:0;}
+  .tier-col-title{font-size:32px;font-weight:800;}
+  .tier-col-count{font-size:20px;color:var(--sub);font-weight:600;margin-left:auto;}
+
+  /* Per-column accent colours */
+  .tcol-1{border-top:3px solid #d4a017;}
+  .tcol-2{border-top:3px solid #9b9b9b;}
+  .tcol-3{border-top:3px solid #b05a1a;}
+  .tcol-4{border-top:3px solid #3a5fad;}
+  .tcol-5{border-top:3px solid #4a8a4a;}
+  .tcol-1 .tier-col-title{color:#d4a017;}
+  .tcol-2 .tier-col-title{color:#c0c0c0;}
+  .tcol-3 .tier-col-title{color:#cd7f32;}
+  .tcol-4 .tier-col-title{color:#5b8ad4;}
+  .tcol-5 .tier-col-title{color:#6aaa6a;}
+  .tcol-1 .tier-col-header{background:rgba(212,160,23,.06);}
+  .tcol-2 .tier-col-header{background:rgba(192,192,192,.05);}
+  .tcol-3 .tier-col-header{background:rgba(205,127,50,.06);}
+  .tcol-4 .tier-col-header{background:rgba(91,138,212,.05);}
+  .tcol-5 .tier-col-header{background:rgba(106,170,106,.04);}
+
+  /* Each player row */
+  .tier-player-item{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid #111;transition:.12s;cursor:default;}
   .tier-player-item:hover{background:#0d0d0d;}
-  .tier-player-item.is-ht .tier-player-name{color:#ffffff;}
-  .tier-player-item.is-lt .tier-player-name{color:#888;}
-  .tier-player-skin{width:36px;height:50px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .tier-player-skin img{height:50px;width:auto;image-rendering:pixelated;}
-  .tier-player-name{font-size:26px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:.15s;}
-  .tier-player-item.is-lt .tier-player-name a{color:#888 !important;}
-  .tier-player-item.is-lt .tier-player-name a:hover{color:#f6b327 !important;}
-  .tier-player-region{font-size:22px;color:var(--sub);flex-shrink:0;}
+
+  /* HT rows: full white; LT rows: dimmed */
+  .tier-player-item.is-ht .tier-player-name a{color:#ffffff !important;}
+  .tier-player-item.is-lt .tier-player-name a{color:#7a7a7a !important;}
+  .tier-player-item.is-lt{opacity:.85;}
+  .tier-player-item.is-ht .tier-player-name a:hover,
+  .tier-player-item.is-lt .tier-player-name a:hover{color:#f6b327 !important;opacity:1;}
+
+  /* Skin thumbnail */
+  .tier-player-skin{width:34px;height:46px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .tier-player-skin img{height:46px;width:auto;image-rendering:pixelated;}
+
+  /* Name */
+  .tier-player-name{font-size:25px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+  /* Chevron indicator — ^^ HT, ^ LT */
+  .tier-chevron{display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0;line-height:1;}
+  .tier-chevron svg{width:18px;height:10px;display:block;}
+  .chev-ht{color:#7a7a7a;}
+  .chev-lt{color:#444;}
+
+  /* Colour helpers still used in Overall tiers */
   .ht1{color:#F7C725;} .lt1{color:#C7A63C;}
   .ht2{color:#5b58ff;} .lt2{color:#7b79e0;}
   .ht3{color:#ff9d47;} .lt3{color:#ffb14a;}
@@ -348,8 +360,9 @@ function openSettings(e){
 function closeSettings(){document.getElementById("settingsOverlay").classList.remove("open");document.getElementById("settingsBtn").classList.remove("active");}
 function handleSettingsOverlayClick(e){if(e.target===document.getElementById("settingsOverlay"))closeSettings();}
 
-function skinHTML(name,size){
-  return `<img src="https://starlightskins.lunareclipse.studio/skin-render/marching/${name}/full" alt="" loading="lazy" style="height:${size}px;width:auto;" onerror="this.style.display='none'"/>`;
+/* ── UPDATED: mc-heads.net skin API (username-based, no UUID needed) ── */
+function skinHTML(name, size){
+  return `<img src="https://mc-heads.net/body/${encodeURIComponent(name)}/100" alt="" loading="lazy" style="height:${size}px;width:auto;image-rendering:pixelated;" onerror="this.style.display='none'"/>`;
 }
 
 /* Chevron badge for top 3 */
@@ -399,28 +412,34 @@ function renderCategoryTiers(cat){
   players.forEach(p=>{const t=p.tiers[cat];if(t&&tierMap[t])tierMap[t].push(p);});
   const hasAny=TIER_ORDER.some(t=>tierMap[t].length>0);
   if(!hasAny){body.innerHTML=`<div class="empty" style="width:100%;"><h1>No Players Yet</h1><p>No players have been assigned a ${cat} tier yet.</p></div>`;return;}
-  const makeRows=(list,isHT)=>list.map(p=>{
-    const nameStyle=isHT?"color:#ffffff;":"color:#888;";
-    const hoverColor="#f6b327";const leaveColor=isHT?"#ffffff":"#888";
-    return `<div class="tier-player-item ${isHT?'is-ht':'is-lt'}">
-      <div class="tier-player-skin">${skinHTML(p.name,50)}</div>
-      <div class="tier-player-name" style="${nameStyle}">
-        <a href="https://namemc.com/profile/${esc(p.name)}" target="_blank" style="color:inherit;text-decoration:none;" onmouseover="this.style.color='${hoverColor}'" onmouseout="this.style.color='${leaveColor}'">${esc(p.name)}</a>
-      </div>
-      <div class="tier-player-region">${esc(p.region)}</div>
-    </div>`;
-  }).join("");
+
+  /* SVG chevron arrow pointing up */
+  const chevSVG=`<svg viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="2,10 10,2 18,10" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  /* HT = 2 chevrons stacked, LT = 1 chevron */
+  const htChevron=`<div class="tier-chevron chev-ht">${chevSVG}${chevSVG}</div>`;
+  const ltChevron=`<div class="tier-chevron chev-lt">${chevSVG}</div>`;
+
+  const makeRow=(p,isHT)=>`<div class="tier-player-item ${isHT?'is-ht':'is-lt'}">
+    <div class="tier-player-skin">${skinHTML(p.name,46)}</div>
+    <div class="tier-player-name">
+      <a href="https://namemc.com/profile/${esc(p.name)}" target="_blank" style="text-decoration:none;">${esc(p.name)}</a>
+    </div>
+    ${isHT?htChevron:ltChevron}
+  </div>`;
+
+  const trophies=["🏆","🥈","🥉","🎖️","🎗️"];
   body.innerHTML=[1,2,3,4,5].map(n=>{
-    const htList=tierMap["HT"+n]||[];const ltList=tierMap["LT"+n]||[];const total=htList.length+ltList.length;
-    const htSection=htList.length>0
-      ?`<div class="tier-sub-label"><span class="ht-label-${n}">HT${n}</span><span class="sub-count">${htList.length}</span></div>${makeRows(htList,true)}`
-      :`<div class="tier-sub-label"><span class="ht-label-${n}">HT${n}</span><span class="sub-count">0</span></div>`;
-    const ltSection=ltList.length>0
-      ?`<div class="tier-sub-label tier-lt-divider"><span class="lt-label-${n}">LT${n}</span><span class="sub-count">${ltList.length}</span></div>${makeRows(ltList,false)}`
-      :`<div class="tier-sub-label tier-lt-divider"><span class="lt-label-${n}">LT${n}</span><span class="sub-count">0</span></div>`;
+    const htList=tierMap["HT"+n]||[];
+    const ltList=tierMap["LT"+n]||[];
+    const total=htList.length+ltList.length;
+    const rows=[...htList.map(p=>makeRow(p,true)),...ltList.map(p=>makeRow(p,false))].join("");
     return `<div class="tier-col tcol-${n}">
-      <div class="tier-col-header"><span class="tier-col-title">Tier ${n}</span><span class="tier-col-count">${total}</span></div>
-      ${htSection}${ltSection}
+      <div class="tier-col-header">
+        <span class="tier-col-trophy">${trophies[n-1]}</span>
+        <span class="tier-col-title">Tier ${n}</span>
+        <span class="tier-col-count">${total}</span>
+      </div>
+      ${rows||`<div style="padding:24px 18px;color:#333;font-size:22px;">No players</div>`}
     </div>`;
   }).join("");
 }
