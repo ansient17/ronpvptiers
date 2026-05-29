@@ -1,212 +1,409 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Minecraft Tier List</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCTiers Rankings</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+    background:#07111f;
+    color:white;
+    padding:20px;
+}
+
+/* TOPBAR */
+
+.topbar{
+    background:#0c1627;
+    border:1px solid #15253f;
+    border-radius:18px;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.logo{
+    font-size:34px;
+    font-weight:800;
+    color:#ffb347;
+}
+
+.nav{
+    display:flex;
+    gap:30px;
+    color:#8ea4c9;
+    font-weight:600;
+}
+
+.search{
+    background:#121f35;
+    border:none;
+    border-radius:12px;
+    padding:12px 18px;
+    color:white;
+    width:230px;
+}
+
+/* GAMEMODE TABS */
+
+.tabs{
+    display:flex;
+    gap:15px;
+    margin-bottom:25px;
+    overflow-x:auto;
+}
+
+.tab{
+    min-width:120px;
+    background:#0c1627;
+    border:1px solid #15253f;
+    border-radius:22px;
+    padding:18px;
+    text-align:center;
+    transition:0.2s;
+    cursor:pointer;
+}
+
+.tab:hover{
+    transform:translateY(-3px);
+    border-color:#3f67b1;
+}
+
+.tab.active{
+    border-color:#ffc74d;
+}
+
+.tab h3{
+    margin-top:8px;
+    font-size:20px;
+}
+
+/* MAIN */
+
+.main{
+    display:grid;
+    grid-template-columns:1fr 320px;
+    gap:25px;
+}
+
+/* LEADERBOARD */
+
+.board{
+    background:#0c1627;
+    border:1px solid #15253f;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.row{
+    display:grid;
+    grid-template-columns:90px 1.4fr 120px 1fr;
+    align-items:center;
+    padding:18px;
+    border-bottom:1px solid #13233d;
+    transition:0.2s;
+}
+
+.row:hover{
+    background:#101e35;
+}
+
+.rank{
+    font-size:42px;
+    font-weight:800;
+    color:#f7c34d;
+}
+
+.player{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.player img{
+    width:64px;
+    height:64px;
+    border-radius:12px;
+}
+
+.player-info h2{
+    font-size:30px;
+}
+
+.player-info p{
+    color:#7f95b8;
+    margin-top:4px;
+}
+
+.region{
+    display:inline-block;
+    padding:10px 14px;
+    border-radius:10px;
+    font-weight:700;
+    text-align:center;
+}
+
+.na{
+    background:#5f2632;
+    color:#ff6f8d;
+}
+
+.eu{
+    background:#214b2c;
+    color:#79ff9f;
+}
+
+/* TIER ICONS */
+
+.tiers{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.tier{
+    background:#121f35;
+    border-radius:12px;
+    padding:10px 12px;
+    text-align:center;
+    min-width:62px;
+}
+
+.tier span{
+    display:block;
+    font-size:13px;
+    margin-top:4px;
+    color:#89a1c8;
+}
+
+.ht1{border:2px solid gold;}
+.lt1{border:2px solid #4fa3ff;}
+.ht2{border:2px solid #d567ff;}
+.lt2{border:2px solid #6fd2ff;}
+.ht3{border:2px solid #ff914d;}
+.lt3{border:2px solid #ffae57;}
+.ht4{border:2px solid #9f7fff;}
+.lt4{border:2px solid #7b8ca5;}
+.ht5{border:2px solid #ff5e7a;}
+.lt5{border:2px solid #b5c0d1;}
+
+/* SIDE PANEL */
+
+.side{
+    background:#0c1627;
+    border:1px solid #15253f;
+    border-radius:20px;
+    padding:25px;
+    height:fit-content;
+}
+
+.side h2{
+    margin-bottom:20px;
+}
+
+.point{
+    display:flex;
+    justify-content:space-between;
+    padding:12px;
+    background:#121f35;
+    border-radius:12px;
+    margin-bottom:12px;
+}
+
+.label{
+    font-weight:700;
+}
+
+/* MOBILE */
+
+@media(max-width:1200px){
+
+    .main{
+        grid-template-columns:1fr;
     }
 
-    body {
-      background: #07111f;
-      color: white;
-      min-height: 100vh;
-      padding: 20px;
+}
+
+@media(max-width:900px){
+
+    .row{
+        grid-template-columns:1fr;
+        gap:20px;
     }
 
-    .topbar {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
+}
 
-    .tab {
-      background: #101c2f;
-      border: 1px solid #1f3352;
-      padding: 12px 20px;
-      border-radius: 14px;
-      cursor: pointer;
-      transition: 0.2s;
-      font-weight: bold;
-    }
-
-    .tab:hover,
-    .tab.active {
-      background: #182842;
-      transform: translateY(-2px);
-    }
-
-    .tier-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-    }
-
-    .tier-column {
-      background: #101c2f;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid #1f3352;
-      box-shadow: 0 0 20px rgba(0,0,0,0.25);
-    }
-
-    .tier-header {
-      padding: 16px;
-      text-align: center;
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    .gold { background: linear-gradient(90deg, #7c5b10, #b88a1d); }
-    .silver { background: linear-gradient(90deg, #555c69, #8993a3); }
-    .bronze { background: linear-gradient(90deg, #5f341f, #a85d35); }
-    .blue { background: linear-gradient(90deg, #123152, #24548b); }
-    .gray { background: linear-gradient(90deg, #353535, #5e5e5e); }
-
-    .player-list {
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      min-height: 500px;
-    }
-
-    .player {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #16253c;
-      padding: 10px;
-      border-radius: 12px;
-      cursor: grab;
-      transition: 0.2s;
-      border: 1px solid transparent;
-    }
-
-    .player:hover {
-      border-color: #4c74b5;
-      transform: scale(1.02);
-    }
-
-    .player img {
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
-    }
-
-    .footer {
-      margin-top: 20px;
-      opacity: 0.7;
-      text-align: center;
-    }
-  </style>
+</style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="tab active">🏆 Overall</div>
-    <div class="tab">⚔ LTMs</div>
-    <div class="tab">🛡 Vanilla</div>
-    <div class="tab">❤ UHC</div>
-    <div class="tab">🧪 Pot</div>
-    <div class="tab">☠ SMP</div>
-  </div>
 
-  <div class="tier-grid">
-    <div class="tier-column">
-      <div class="tier-header gold">Tier 1</div>
-      <div class="player-list" id="tier1">
-        <div class="player" draggable="true">
-          <img src="https://mc-heads.net/avatar/Technoblade" />
-          <span>Technoblade</span>
-        </div>
-        <div class="player" draggable="true">
-          <img src="https://mc-heads.net/avatar/Dream" />
-          <span>Dream</span>
-        </div>
-      </div>
+<div class="topbar">
+
+    <div class="logo">MCTIERS</div>
+
+    <div class="nav">
+        <div>Home</div>
+        <div>Rankings</div>
+        <div>Discords</div>
+        <div>API Docs</div>
     </div>
 
-    <div class="tier-column">
-      <div class="tier-header silver">Tier 2</div>
-      <div class="player-list" id="tier2">
-        <div class="player" draggable="true">
-          <img src="https://mc-heads.net/avatar/Sapnap" />
-          <span>Sapnap</span>
-        </div>
-        <div class="player" draggable="true">
-          <img src="https://mc-heads.net/avatar/GeorgeNotFound" />
-          <span>GeorgeNotFound</span>
-        </div>
-      </div>
+    <input class="search" placeholder="Search player...">
+
+</div>
+
+<div class="tabs">
+
+    <div class="tab active">
+        🏆
+        <h3>Overall</h3>
     </div>
 
-    <div class="tier-column">
-      <div class="tier-header bronze">Tier 3</div>
-      <div class="player-list" id="tier3">
-        <div class="player" draggable="true">
-          <img src="https://mc-heads.net/avatar/TommyInnit" />
-          <span>TommyInnit</span>
-        </div>
-      </div>
+    <div class="tab">
+        ⚔
+        <h3>LTMs</h3>
     </div>
 
-    <div class="tier-column">
-      <div class="tier-header blue">Tier 4</div>
-      <div class="player-list" id="tier4">
-        <div class="player" draggable="true">
-          <img src="https://mc-heads.net/avatar/BadBoyHalo" />
-          <span>BadBoyHalo</span>
-        </div>
-      </div>
+    <div class="tab">
+        🛡
+        <h3>Vanilla</h3>
     </div>
 
-    <div class="tier-column">
-      <div class="tier-header gray">Tier 5</div>
-      <div class="player-list" id="tier5">
-        <div class="player" draggable="true">
-          <img src="https://mc-heads.net/avatar/Skeppy" />
-          <span>Skeppy</span>
-        </div>
-      </div>
+    <div class="tab">
+        ❤
+        <h3>UHC</h3>
     </div>
-  </div>
 
-  <div class="footer">
-    Drag players between tiers • Ready for GitHub Pages
-  </div>
+    <div class="tab">
+        🧪
+        <h3>Pot</h3>
+    </div>
 
-  <script>
-    const players = document.querySelectorAll('.player');
-    const lists = document.querySelectorAll('.player-list');
+    <div class="tab">
+        ☠
+        <h3>SMP</h3>
+    </div>
 
-    let dragged = null;
+</div>
 
-    players.forEach(player => {
-      player.addEventListener('dragstart', () => {
-        dragged = player;
-        setTimeout(() => player.style.display = 'none', 0);
-      });
+<div class="main">
 
-      player.addEventListener('dragend', () => {
-        player.style.display = 'flex';
-      });
-    });
+    <div class="board">
 
-    lists.forEach(list => {
-      list.addEventListener('dragover', e => {
-        e.preventDefault();
-      });
+        <div class="row">
 
-      list.addEventListener('drop', () => {
-        list.appendChild(dragged);
-      });
-    });
-  </script>
+            <div class="rank">1.</div>
+
+            <div class="player">
+                <img src="https://mc-heads.net/avatar/Dream">
+                <div class="player-info">
+                    <h2>Dream</h2>
+                    <p>Combat Master (330 points)</p>
+                </div>
+            </div>
+
+            <div class="region na">NA</div>
+
+            <div class="tiers">
+
+                <div class="tier ht1">
+                    HT1
+                    <span>60</span>
+                </div>
+
+                <div class="tier lt1">
+                    LT1
+                    <span>45</span>
+                </div>
+
+                <div class="tier ht2">
+                    HT2
+                    <span>30</span>
+                </div>
+
+                <div class="tier lt2">
+                    LT2
+                    <span>15</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="rank">2.</div>
+
+            <div class="player">
+                <img src="https://mc-heads.net/avatar/Technoblade">
+                <div class="player-info">
+                    <h2>Technoblade</h2>
+                    <p>Combat Master (300 points)</p>
+                </div>
+            </div>
+
+            <div class="region eu">EU</div>
+
+            <div class="tiers">
+
+                <div class="tier ht1">
+                    HT1
+                    <span>60</span>
+                </div>
+
+                <div class="tier ht3">
+                    HT3
+                    <span>10</span>
+                </div>
+
+                <div class="tier lt3">
+                    LT3
+                    <span>6</span>
+                </div>
+
+                <div class="tier lt5">
+                    LT5
+                    <span>1</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="side">
+
+        <h2>⭐ Tier Point Values</h2>
+
+        <div class="point"><div class="label">HT1</div><div>60 Points</div></div>
+        <div class="point"><div class="label">LT1</div><div>45 Points</div></div>
+        <div class="point"><div class="label">HT2</div><div>30 Points</div></div>
+        <div class="point"><div class="label">LT2</div><div>15 Points</div></div>
+        <div class="point"><div class="label">HT3</div><div>10 Points</div></div>
+        <div class="point"><div class="label">LT3</div><div>6 Points</div></div>
+        <div class="point"><div class="label">HT4</div><div>4 Points</div></div>
+        <div class="point"><div class="label">LT4</div><div>3 Points</div></div>
+        <div class="point"><div class="label">HT5</div><div>2 Points</div></div>
+        <div class="point"><div class="label">LT5</div><div>1 Point</div></div>
+
+    </div>
+
+</div>
+
 </body>
 </html>
