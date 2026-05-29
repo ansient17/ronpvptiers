@@ -201,14 +201,13 @@ let uuidCache = {};
 
 async function fetchUUIDs(){
   const names = players.map(p=>p.name).filter(n=>!uuidCache[n.toLowerCase()]);
-  for(const name of names){
+  await Promise.all(names.map(async name => {
     try{
-      const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent("https://api.mojang.com/users/profiles/minecraft/"+name)}`);
-      const j = await r.json();
-      const data = JSON.parse(j.contents);
-      if(data && data.id) uuidCache[name.toLowerCase()] = data.id;
+      const r = await fetch(`https://api.minetools.eu/uuid/${encodeURIComponent(name)}`);
+      const data = await r.json();
+      if(data && data.id) uuidCache[name.toLowerCase()] = data.id.replace(/-/g,"");
     }catch(e){}
-  }
+  }));
   renderBoard();
 }
 
@@ -265,9 +264,10 @@ function renderBoard(){
     const categoryEmoji = {Sword:"⚔️",UHC:"❤️",SMP:"💀",Mace:"🔨"};
     const badges = tierKeys.filter(k=>p.tiers[k]).map(k=>`<span class="tier-badge ${p.tiers[k].toLowerCase()}">${p.tiers[k]}<span style="font-size:18px;margin-left:4px;">${categoryEmoji[k]}</span></span>`).join("");
     const uuid = uuidCache[p.name.toLowerCase()] || "";
+    const noSkin = `<div style="width:40px;height:68px;background:#111;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#555;font-size:22px;font-weight:700;">✕</div>`;
     const skinImg = uuid
-      ? `<img src="https://crafatar.com/renders/body/${uuid}?overlay" alt="" loading="lazy" onerror="this.style.opacity=0" />`
-      : `<div style="width:40px;height:68px;background:#111;border-radius:4px;opacity:0.3;"></div>`;
+      ? `<img src="https://crafatar.com/renders/body/${uuid}?overlay" alt="" loading="lazy" onerror="this.outerHTML=\'${noSkin.replace(/'/g, "\\'")}'" />`
+      : noSkin;
     return `<div class="player-row">
       <div class="${rankCls}">#${i+1}</div>
       <div class="skin-wrap">${skinImg}</div>
