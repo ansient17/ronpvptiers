@@ -20,6 +20,21 @@
   .admin-btn:hover{border-color:var(--gold);color:var(--gold);}
   .admin-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(246,179,39,.08);}
 
+  .topbar-right{display:flex;align-items:center;gap:14px;position:relative;}
+  .discord-btn{background:transparent;border:1px solid var(--border);border-radius:14px;color:#5865F2;font-size:24px;padding:12px 20px;cursor:pointer;transition:.2s;display:flex;align-items:center;}
+  .discord-btn:hover{border-color:#5865F2;background:rgba(88,101,242,.08);}
+  .discord-dropdown{position:absolute;top:calc(100% + 12px);right:0;background:#0f0f0f;border:1px solid var(--border);border-radius:18px;overflow:hidden;min-width:340px;z-index:200;box-shadow:0 8px 40px rgba(0,0,0,.7);display:none;}
+  .discord-dropdown.open{display:block;}
+  .discord-item{display:flex;align-items:center;gap:18px;padding:22px 26px;text-decoration:none;color:var(--text);transition:.15s;border-bottom:1px solid var(--border);}
+  .discord-item:last-child{border-bottom:none;}
+  .discord-item:hover{background:#1a1a1a;}
+  .discord-item:hover .discord-item-name{color:#5865F2;}
+  .discord-item-icon{width:44px;height:44px;background:#5865F2;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .discord-item-icon svg{width:26px;height:26px;fill:#fff;}
+  .discord-item-label{display:flex;flex-direction:column;gap:4px;}
+  .discord-item-name{font-size:26px;font-weight:700;transition:.15s;}
+  .discord-item-url{font-size:20px;color:var(--sub);font-weight:400;}
+
   .tabs{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
   .tab{width:200px;height:130px;background:#000;border:1px solid var(--border);border-radius:24px;display:flex;flex-direction:column;justify-content:center;align-items:center;cursor:pointer;transition:.2s;}
   .tab:hover{transform:translateY(-4px);border-color:#e8e8e8;}
@@ -27,11 +42,11 @@
   .tab .icon{font-size:40px;margin-bottom:8px;}
   .tab h2{font-size:38px;font-weight:700;}
 
+  /* ── OVERALL layout ── */
   .main{display:grid;grid-template-columns:1fr 300px;gap:20px;}
   .board{background:#000;border:1px solid var(--border);border-radius:24px;min-height:680px;overflow:hidden;}
-  .headers{display:grid;grid-template-columns:80px 80px 1fr 200px 1fr;padding:26px 32px;color:var(--muted);font-size:30px;font-weight:600;border-bottom:1px solid var(--border);}
-
-  .player-row{display:grid;grid-template-columns:80px 80px 1fr 200px 1fr;padding:12px 32px;border-bottom:1px solid #0d0d0d;align-items:center;transition:.15s;}
+  .headers{display:grid;grid-template-columns:80px 80px 1fr 160px 140px 1fr;padding:26px 32px;color:var(--muted);font-size:30px;font-weight:600;border-bottom:1px solid var(--border);}
+  .player-row{display:grid;grid-template-columns:80px 80px 1fr 160px 140px 1fr;padding:12px 32px;border-bottom:1px solid #0d0d0d;align-items:center;transition:.15s;}
   .player-row:hover{background:#0d0d0d;}
   .skin-wrap{width:52px;height:72px;display:flex;align-items:center;justify-content:center;}
   .skin-wrap img{height:72px;width:auto;image-rendering:pixelated;}
@@ -41,14 +56,67 @@
   .rank.r3{color:#CD7F32;}
   .player-name{font-size:32px;font-weight:700;}
   .region{font-size:26px;color:var(--sub);}
+  .points-col{font-size:30px;font-weight:800;color:var(--gold);}
   .tiers{display:flex;gap:10px;flex-wrap:wrap;}
   .tier-badge{font-size:22px;font-weight:700;padding:4px 14px;border-radius:8px;background:#111;}
 
+  /* ── TIER COLUMN layout (Sword/UHC/SMP/Mace) ── */
+  .tier-view{display:flex;gap:0;width:100%;}
+  .tier-col{flex:1;border-right:1px solid var(--border);min-height:680px;}
+  .tier-col:last-child{border-right:none;}
+
+  /* merged column header — shows "Tier N" */
+  .tier-col-header{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+  .tier-col-title{font-size:34px;font-weight:800;}
+  .tier-col-count{font-size:22px;color:var(--sub);font-weight:600;margin-left:auto;}
+
+  /* HT/LT sub-section label inside a column */
+  .tier-sub-label{display:flex;align-items:center;gap:10px;padding:10px 18px 8px;border-bottom:1px solid #181818;}
+  .tier-sub-label span{font-size:22px;font-weight:800;}
+  .tier-sub-label .sub-count{font-size:20px;color:var(--sub);font-weight:600;margin-left:auto;}
+
+  /* divider between HT and LT sections */
+  .tier-lt-divider{border-top:1px dashed #222;margin:0;}
+
+  /* per-tier accent colours on the column header title */
+  .tcol-1 .tier-col-title{color:#F7C725;}
+  .tcol-2 .tier-col-title{color:#5b58ff;}
+  .tcol-3 .tier-col-title{color:#ff9d47;}
+  .tcol-4 .tier-col-title{color:#e03030;}
+  .tcol-5 .tier-col-title{color:#8a8a8a;}
+
+  /* left border accent per tier number */
+  .tcol-1{border-left:3px solid #F7C725 !important;}
+  .tcol-2{border-left:3px solid #5b58ff !important;}
+  .tcol-3{border-left:3px solid #ff9d47 !important;}
+  .tcol-4{border-left:3px solid #e03030 !important;}
+  .tcol-5{border-left:3px solid #8a8a8a !important;}
+
+  /* HT sub-label colours (bright) */
+  .ht-label-1{color:#F7C725;} .ht-label-2{color:#5b58ff;}
+  .ht-label-3{color:#ff9d47;} .ht-label-4{color:#e03030;} .ht-label-5{color:#aaaaaa;}
+  /* LT sub-label colours (dimmer) */
+  .lt-label-1{color:#8a7020;} .lt-label-2{color:#3a38a0;}
+  .lt-label-3{color:#a06030;} .lt-label-4{color:#802020;} .lt-label-5{color:#606060;}
+
+  /* player rows — HT bright, LT dimmed */
+  .tier-player-item{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid #0d0d0d;transition:.15s;}
+  .tier-player-item:hover{background:#0d0d0d;}
+  .tier-player-item.is-ht .tier-player-name{color:#ffffff;}
+  .tier-player-item.is-lt .tier-player-name{color:#888;}
+  .tier-player-skin{width:36px;height:50px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .tier-player-skin img{height:50px;width:auto;image-rendering:pixelated;}
+  .tier-player-name{font-size:26px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:.15s;}
+  .tier-player-item.is-lt .tier-player-name a{color:#888 !important;}
+  .tier-player-item.is-lt .tier-player-name a:hover{color:#f6b327 !important;}
+  .tier-player-region{font-size:22px;color:var(--sub);flex-shrink:0;}
+
+  /* tier colours for badges (reused) */
   .ht1{color:#F7C725;} .lt1{color:#C7A63C;}
-  .ht2{color:#2C25F7;} .lt2{color:#3E3CC7;}
+  .ht2{color:#5b58ff;} .lt2{color:#7b79e0;}
   .ht3{color:#ff9d47;} .lt3{color:#ffb14a;}
-  .ht4{color:#9b7cff;} .lt4{color:#8c97b5;}
-  .ht5{color:#ff5c7d;} .lt5{color:#d3d9e7;}
+  .ht4{color:#e03030;} .lt4{color:#a02020;}
+  .ht5{color:#aaaaaa;} .lt5{color:#606060;}
 
   .empty{height:580px;display:flex;justify-content:center;align-items:center;flex-direction:column;text-align:center;}
   .empty h1{font-size:60px;margin-bottom:14px;}
@@ -94,15 +162,36 @@
   .btn-edit-ico:hover{border-color:var(--gold);color:var(--gold);}
   .btn-del-ico{background:transparent;border:1px solid #330000;border-radius:10px;color:#ff5555;font-size:22px;padding:8px 16px;cursor:pointer;}
   .btn-del-ico:hover{background:#200000;}
-
   select option{background:#0f0f0f;}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="logo">RONSMP RANKED</div>
-  <button class="admin-btn" id="adminToggle" onclick="openLogin()">⚙ Admin</button>
+  <div class="logo" onclick="document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab')[0].classList.add('active');currentTab='Overall';renderBoard();" style="cursor:pointer;">RONSMP RANKED</div>
+  <div class="topbar-right">
+    <div style="position:relative;">
+      <button class="discord-btn" id="discordToggle" onclick="toggleDiscord(event)">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="#5865F2" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.033.056a19.909 19.909 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+      </button>
+      <div class="discord-dropdown" id="discordDropdown">
+        <a href="https://discord.gg/dBHrmXKJbz" target="_blank" class="discord-item">
+          <div class="discord-item-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.033.056a19.909 19.909 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></div>
+          <div class="discord-item-label">
+            <span class="discord-item-name">RONSMP</span>
+            <span class="discord-item-url">discord.gg/dBHrmXKJbz</span>
+          </div>
+        </a>
+        <a href="https://discord.gg/gqmzbRfNvz" target="_blank" class="discord-item">
+          <div class="discord-item-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.033.056a19.909 19.909 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></div>
+          <div class="discord-item-label">
+            <span class="discord-item-name">RONSMP RANKED</span>
+            <span class="discord-item-url">discord.gg/gqmzbRfNvz</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="tabs">
@@ -111,60 +200,77 @@
   <div class="tab" onclick="setTab(this,'UHC')"><div class="icon">❤️</div><h2>UHC</h2></div>
   <div class="tab" onclick="setTab(this,'SMP')"><div class="icon">💀</div><h2>SMP</h2></div>
   <div class="tab" onclick="setTab(this,'Mace')"><div class="icon">🔨</div><h2>Mace</h2></div>
+  <div class="tab" onclick="setTab(this,'Settings')"><div class="icon">⚙️</div><h2>Settings</h2></div>
 </div>
 
-<div id="adminPanel" style="display:none;">
-  <div class="admin-panel">
-    <div class="admin-panel-title">⚙ Admin Panel — editing as <span id="editingAs" style="color:#fff;margin-left:8px;"></span>
-      <button class="btn-sm" style="background:#1a1a1a;color:var(--sub);border:1px solid var(--border);margin-left:auto;font-size:20px;" onclick="logout()">Log out</button>
+<!-- SETTINGS view -->
+<div id="settingsView" style="display:none;">
+  <!-- Login gate (shown when not logged in) -->
+  <div id="settingsLogin" class="admin-panel" style="max-width:560px;">
+    <div class="admin-panel-title">🔒 Admin Login</div>
+    <p style="color:var(--sub);font-size:26px;margin-bottom:28px;">Enter your whitelisted credentials to access the admin panel.</p>
+    <div class="field"><label>Username</label><input id="loginUser" placeholder="Username" autocomplete="off" /></div>
+    <div class="field"><label>Password</label><input id="loginPass" type="password" placeholder="Password" /></div>
+    <div id="loginErr" class="err"></div>
+    <div class="btn-row" style="margin-top:24px;">
+      <button class="btn btn-primary" onclick="doLogin()">Login</button>
     </div>
-    <div class="ap-row">
-      <div class="ap-field"><label>Player name</label><input id="newName" placeholder="e.g. Steve" /></div>
-      <div class="ap-field"><label>Region</label>
-        <select id="newRegion">
-          <option>NA</option><option>EU</option><option>AS</option><option>SA</option><option>OC</option>
-        </select>
+  </div>
+  <!-- Admin panel (shown when logged in) -->
+  <div id="adminPanel" style="display:none;">
+    <div class="admin-panel">
+      <div class="admin-panel-title">⚙ Admin Panel — editing as <span id="editingAs" style="color:#fff;margin-left:8px;"></span>
+        <button class="btn-sm" style="background:#1a1a1a;color:var(--sub);border:1px solid var(--border);margin-left:auto;font-size:20px;" onclick="logout()">Log out</button>
       </div>
-      <div class="ap-field" style="max-width:160px;"><label>Sword tier</label>
-        <select id="newSword"><option value="">—</option>
-          <option>HT1</option><option>LT1</option><option>HT2</option><option>LT2</option>
-          <option>HT3</option><option>LT3</option><option>HT4</option><option>LT4</option>
-          <option>HT5</option><option>LT5</option>
-        </select>
+      <div class="ap-row">
+        <div class="ap-field"><label>Player name</label><input id="newName" placeholder="e.g. Steve" /></div>
+        <div class="ap-field"><label>Region</label>
+          <select id="newRegion">
+            <option>NA</option><option>EU</option><option>AS</option><option>SA</option><option>OC</option>
+          </select>
+        </div>
+        <div class="ap-field" style="max-width:160px;"><label>Sword tier</label>
+          <select id="newSword"><option value="">—</option>
+            <option>HT1</option><option>LT1</option><option>HT2</option><option>LT2</option>
+            <option>HT3</option><option>LT3</option><option>HT4</option><option>LT4</option>
+            <option>HT5</option><option>LT5</option>
+          </select>
+        </div>
+        <div class="ap-field" style="max-width:160px;"><label>UHC tier</label>
+          <select id="newUHC"><option value="">—</option>
+            <option>HT1</option><option>LT1</option><option>HT2</option><option>LT2</option>
+            <option>HT3</option><option>LT3</option><option>HT4</option><option>LT4</option>
+            <option>HT5</option><option>LT5</option>
+          </select>
+        </div>
+        <div class="ap-field" style="max-width:160px;"><label>SMP tier</label>
+          <select id="newSMP"><option value="">—</option>
+            <option>HT1</option><option>LT1</option><option>HT2</option><option>LT2</option>
+            <option>HT3</option><option>LT3</option><option>HT4</option><option>LT4</option>
+            <option>HT5</option><option>LT5</option>
+          </select>
+        </div>
+        <div class="ap-field" style="max-width:160px;"><label>Mace tier</label>
+          <select id="newMace"><option value="">—</option>
+            <option>HT1</option><option>LT1</option><option>HT2</option><option>LT2</option>
+            <option>HT3</option><option>LT3</option><option>HT4</option><option>LT4</option>
+            <option>HT5</option><option>LT5</option>
+          </select>
+        </div>
+        <div class="ap-field" style="max-width:120px;align-self:flex-end;">
+          <button class="btn-sm btn-add" onclick="addPlayer()" style="width:100%;padding:14px;">+ Add</button>
+        </div>
       </div>
-      <div class="ap-field" style="max-width:160px;"><label>UHC tier</label>
-        <select id="newUHC"><option value="">—</option>
-          <option>HT1</option><option>LT1</option><option>HT2</option><option>LT2</option>
-          <option>HT3</option><option>LT3</option><option>HT4</option><option>LT4</option>
-          <option>HT5</option><option>LT5</option>
-        </select>
-      </div>
-      <div class="ap-field" style="max-width:160px;"><label>SMP tier</label>
-        <select id="newSMP"><option value="">—</option>
-          <option>HT1</option><option>LT1</option><option>HT2</option><option>LT2</option>
-          <option>HT3</option><option>LT3</option><option>HT4</option><option>LT4</option>
-          <option>HT5</option><option>LT5</option>
-        </select>
-      </div>
-      <div class="ap-field" style="max-width:160px;"><label>Mace tier</label>
-        <select id="newMace"><option value="">—</option>
-          <option>HT1</option><option>LT1</option><option>HT2</option><option>LT2</option>
-          <option>HT3</option><option>LT3</option><option>HT4</option><option>LT4</option>
-          <option>HT5</option><option>LT5</option>
-        </select>
-      </div>
-      <div class="ap-field" style="max-width:120px;align-self:flex-end;">
-        <button class="btn-sm btn-add" onclick="addPlayer()" style="width:100%;padding:14px;">+ Add</button>
-      </div>
+      <div id="addErr" class="err"></div>
+      <div id="playerEditList" style="margin-top:24px;"></div>
     </div>
-    <div id="addErr" class="err"></div>
-    <div id="playerEditList" style="margin-top:24px;"></div>
   </div>
 </div>
 
-<div class="main">
+<!-- OVERALL view -->
+<div id="overallView" class="main">
   <div class="board">
-    <div class="headers"><div>#</div><div></div><div>PLAYER</div><div>REGION</div><div>TIERS</div></div>
+    <div class="headers"><div>#</div><div></div><div>PLAYER</div><div>REGION</div><div>POINTS</div><div>TIERS</div></div>
     <div id="boardBody"></div>
   </div>
   <div class="side">
@@ -182,12 +288,25 @@
   </div>
 </div>
 
+<!-- CATEGORY tier-column view -->
+<div id="categoryView" style="display:none;">
+  <div class="board" style="border-radius:24px;overflow:hidden;">
+    <div id="tierColsBody" class="tier-view"></div>
+  </div>
+</div>
+
 <div class="overlay" id="overlay" style="display:none;">
   <div class="modal" id="modalBox"></div>
 </div>
 
 <script>
 const TIER_PTS = {HT1:60,LT1:45,HT2:30,LT2:15,HT3:10,LT3:6,HT4:4,LT4:3,HT5:2,LT5:1};
+const TIER_ORDER = ["HT1","LT1","HT2","LT2","HT3","LT3","HT4","LT4","HT5","LT5"];
+
+const TIER_ICONS = {
+  HT1:"🏆",LT1:"🏆",HT2:"🏆",LT2:"🏆",
+  HT3:"🏆",LT3:"🏆",HT4:"🏆",LT4:"🏆",HT5:"🏆",LT5:"🏆"
+};
 
 const WHITELIST = {
   "Account": "988566e8018c27752687cbb5d49ebb329e72313c0d6588f7465fc2027a9e3d86",
@@ -235,6 +354,11 @@ function calcScore(p){
   return s;
 }
 
+function calcTabScore(p, tab){
+  if(tab === "Overall") return calcScore(p);
+  return p.tiers[tab] ? (TIER_PTS[p.tiers[tab]] || 0) : 0;
+}
+
 function setTab(el, name){
   document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
   el.classList.add("active");
@@ -242,38 +366,106 @@ function setTab(el, name){
   renderBoard();
 }
 
-function renderBoard(){
-  const body = document.getElementById("boardBody");
-  let list = [...players];
+function skinHTML(name, size){
+  const uuid = uuidCache[name.toLowerCase()] || "";
+  const noSkin = `<div style="width:${Math.round(size*0.55)}px;height:${size}px;background:#111;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#555;font-size:${Math.round(size*0.3)}px;font-weight:700;">✕</div>`;
+  if(!uuid) return noSkin;
+  return `<img src="https://crafatar.com/renders/body/${uuid}?overlay" alt="" loading="lazy" style="height:${size}px;width:auto;image-rendering:pixelated;" onerror="this.outerHTML='${noSkin.replace(/'/g,"\\'")}'"/>`;
+}
 
-  if(currentTab !== "Overall"){
-    list = list.filter(p => p.tiers[currentTab]);
-    list.sort((a,b)=>(TIER_PTS[b.tiers[currentTab]]||0)-(TIER_PTS[a.tiers[currentTab]]||0));
+function renderBoard(){
+  const sv = document.getElementById("settingsView");
+  const ov = document.getElementById("overallView");
+  const cv = document.getElementById("categoryView");
+  if(currentTab === "Settings"){
+    ov.style.display="none"; cv.style.display="none"; sv.style.display="block";
+    // show login or panel depending on auth state
+    document.getElementById("settingsLogin").style.display = loggedInUser ? "none" : "block";
+    document.getElementById("adminPanel").style.display   = loggedInUser ? "block" : "none";
+    if(loggedInUser) renderEditList();
+  } else if(currentTab === "Overall"){
+    sv.style.display="none"; cv.style.display="none"; ov.style.display="grid";
+    renderOverall();
   } else {
-    list.sort((a,b)=>calcScore(b)-calcScore(a));
+    sv.style.display="none"; ov.style.display="none"; cv.style.display="block";
+    renderCategoryTiers(currentTab);
   }
+}
+
+function renderOverall(){
+  const body = document.getElementById("boardBody");
+  let list = [...players].sort((a,b)=>calcScore(b)-calcScore(a));
 
   if(list.length === 0){
     body.innerHTML = `<div class="empty"><h1>No Players Yet</h1><p>Players will appear here once added through the Admin panel.</p></div>`;
     return;
   }
 
+  const categoryEmoji = {Sword:"⚔️",UHC:"❤️",SMP:"💀",Mace:"🔨"};
   body.innerHTML = list.map((p,i)=>{
     const rankCls = i===0?"rank r1":i===1?"rank r2":i===2?"rank r3":"rank";
-    const tierKeys = currentTab==="Overall" ? ["Sword","UHC","SMP","Mace"] : [currentTab];
-    const categoryEmoji = {Sword:"⚔️",UHC:"❤️",SMP:"💀",Mace:"🔨"};
-    const badges = tierKeys.filter(k=>p.tiers[k]).map(k=>`<span class="tier-badge ${p.tiers[k].toLowerCase()}">${p.tiers[k]}<span style="font-size:18px;margin-left:4px;">${categoryEmoji[k]}</span></span>`).join("");
-    const uuid = uuidCache[p.name.toLowerCase()] || "";
-    const noSkin = `<div style="width:40px;height:68px;background:#111;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#555;font-size:22px;font-weight:700;">✕</div>`;
-    const skinImg = uuid
-      ? `<img src="https://crafatar.com/renders/body/${uuid}?overlay" alt="" loading="lazy" onerror="this.outerHTML=\'${noSkin.replace(/'/g, "\\'")}'" />`
-      : noSkin;
+    const badges = ["Sword","UHC","SMP","Mace"].filter(k=>p.tiers[k])
+      .map(k=>`<span class="tier-badge ${p.tiers[k].toLowerCase()}">${p.tiers[k]}<span style="font-size:18px;margin-left:4px;">${categoryEmoji[k]}</span></span>`).join("");
+    const pts = calcScore(p);
     return `<div class="player-row">
       <div class="${rankCls}">#${i+1}</div>
-      <div class="skin-wrap">${skinImg}</div>
+      <div class="skin-wrap">${skinHTML(p.name,72)}</div>
       <div class="player-name"><a href="https://namemc.com/profile/${esc(p.name)}" target="_blank" style="color:inherit;text-decoration:none;" onmouseover="this.style.color='#f6b327'" onmouseout="this.style.color='#ffffff'">${esc(p.name)}</a></div>
       <div class="region">${esc(p.region)}</div>
+      <div class="points-col">${pts}</div>
       <div class="tiers">${badges||'<span style="color:#333;font-size:24px;">—</span>'}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderCategoryTiers(cat){
+  const body = document.getElementById("tierColsBody");
+
+  const tierMap = {};
+  TIER_ORDER.forEach(t => tierMap[t] = []);
+  players.forEach(p => {
+    const t = p.tiers[cat];
+    if(t && tierMap[t]) tierMap[t].push(p);
+  });
+
+  const hasAny = TIER_ORDER.some(t => tierMap[t].length > 0);
+  if(!hasAny){
+    body.innerHTML = `<div class="empty" style="width:100%;"><h1>No Players Yet</h1><p>No players have been assigned a ${cat} tier yet.</p></div>`;
+    return;
+  }
+
+  const makeRows = (list, isHT) => list.map(p => {
+    const nameStyle = isHT ? "color:#ffffff;" : "color:#888;";
+    const hoverColor = "#f6b327";
+    const leaveColor = isHT ? "#ffffff" : "#888";
+    return `<div class="tier-player-item ${isHT ? 'is-ht' : 'is-lt'}">
+      <div class="tier-player-skin">${skinHTML(p.name, 50)}</div>
+      <div class="tier-player-name" style="${nameStyle}">
+        <a href="https://namemc.com/profile/${esc(p.name)}" target="_blank" style="color:inherit;text-decoration:none;" onmouseover="this.style.color='${hoverColor}'" onmouseout="this.style.color='${leaveColor}'">${esc(p.name)}</a>
+      </div>
+      <div class="tier-player-region">${esc(p.region)}</div>
+    </div>`;
+  }).join("");
+
+  body.innerHTML = [1,2,3,4,5].map(n => {
+    const htList = tierMap["HT"+n] || [];
+    const ltList = tierMap["LT"+n] || [];
+    const total = htList.length + ltList.length;
+
+    const htSection = htList.length > 0
+      ? `<div class="tier-sub-label"><span class="ht-label-${n}">HT${n}</span><span class="sub-count">${htList.length}</span></div>${makeRows(htList, true)}`
+      : `<div class="tier-sub-label"><span class="ht-label-${n}" style="opacity:.3">HT${n}</span><span class="sub-count" style="opacity:.3">0</span></div>`;
+
+    const ltSection = ltList.length > 0
+      ? `<div class="tier-sub-label tier-lt-divider"><span class="lt-label-${n}">LT${n}</span><span class="sub-count">${ltList.length}</span></div>${makeRows(ltList, false)}`
+      : `<div class="tier-sub-label tier-lt-divider"><span class="lt-label-${n}" style="opacity:.3">LT${n}</span><span class="sub-count" style="opacity:.3">0</span></div>`;
+
+    return `<div class="tier-col tcol-${n}">
+      <div class="tier-col-header">
+        <span class="tier-col-title">Tier ${n}</span>
+        <span class="tier-col-count">${total}</span>
+      </div>
+      ${htSection}${ltSection}
     </div>`;
   }).join("");
 }
@@ -291,21 +483,7 @@ function renderEditList(){
     </div>`).join("");
 }
 
-function openLogin(){
-  if(loggedInUser){ logout(); return; }
-  showModal(`
-    <h2>Admin Login</h2>
-    <p>Enter your whitelisted username and password.</p>
-    <div class="field"><label>Username</label><input id="loginUser" placeholder="Username" autocomplete="off" /></div>
-    <div class="field"><label>Password</label><input id="loginPass" type="password" placeholder="Password" /></div>
-    <div id="loginErr" class="err"></div>
-    <div class="btn-row">
-      <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="doLogin()">Login</button>
-    </div>
-  `);
-  setTimeout(()=>{ const u=document.getElementById("loginUser"); if(u) u.focus(); },50);
-}
+// openLogin removed — login is now in the Settings tab
 
 async function doLogin(){
   const u = document.getElementById("loginUser").value.trim();
@@ -314,19 +492,18 @@ async function doLogin(){
   const hash = await hashPassword(p);
   if(WHITELIST[u] !== hash){ document.getElementById("loginErr").textContent="Incorrect password."; return; }
   loggedInUser = u;
-  closeModal();
   document.getElementById("editingAs").textContent = u;
+  document.getElementById("settingsLogin").style.display="none";
   document.getElementById("adminPanel").style.display="block";
-  document.getElementById("adminToggle").classList.add("active");
-  document.getElementById("adminToggle").textContent = "⚙ Admin ✓";
   renderEditList();
 }
 
 function logout(){
   loggedInUser = null;
   document.getElementById("adminPanel").style.display="none";
-  document.getElementById("adminToggle").classList.remove("active");
-  document.getElementById("adminToggle").textContent = "⚙ Admin";
+  document.getElementById("settingsLogin").style.display="block";
+  document.getElementById("loginPass").value="";
+  document.getElementById("loginErr").textContent="";
 }
 
 function addPlayer(){
@@ -406,10 +583,19 @@ document.getElementById("overlay").addEventListener("click",function(e){
   if(e.target===this) closeModal();
 });
 
-document.addEventListener("keydown",e=>{ if(e.key==="Enter"){
-  const li=document.getElementById("loginUser");
-  if(li && document.getElementById("overlay").style.display!=="none") doLogin();
-}});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Enter" && currentTab==="Settings" && !loggedInUser){
+    doLogin();
+  }
+});
+
+function toggleDiscord(e){
+  e.stopPropagation();
+  document.getElementById("discordDropdown").classList.toggle("open");
+}
+document.addEventListener("click", function(){
+  document.getElementById("discordDropdown").classList.remove("open");
+});
 
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
