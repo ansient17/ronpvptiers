@@ -1,350 +1,380 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RONTIERS</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+  :root{
+    --gold:#f6b327;--bg:#0A0A0A;--card:#0f0f0f;--border:#1e1e1e;
+    --muted:#404040;--text:#ffffff;--sub:#7184a7;
+  }
+  body{background:var(--bg);color:var(--text);padding:16px;zoom:0.52;}
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Inter',sans-serif;
-}
+  .topbar{background:#000;border:1px solid var(--border);border-radius:20px;padding:20px 28px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-size:52px;font-weight:800;color:var(--gold);letter-spacing:2px;}
+  .admin-btn{background:transparent;border:1px solid var(--border);border-radius:14px;color:var(--sub);font-size:24px;padding:12px 28px;cursor:pointer;transition:.2s;}
+  .admin-btn:hover{border-color:var(--gold);color:var(--gold);}
+  .admin-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(246,179,39,.08);}
 
-body{
-    background:#0A0A0A;
-    color:white;
-    padding:18px;
-    zoom:0.5;
-}
+  .tabs{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+  .tab{width:200px;height:130px;background:#000;border:1px solid var(--border);border-radius:24px;display:flex;flex-direction:column;justify-content:center;align-items:center;cursor:pointer;transition:.2s;}
+  .tab:hover{transform:translateY(-4px);border-color:#e8e8e8;}
+  .tab.active{border:2px solid var(--gold);box-shadow:0 0 25px rgba(246,179,39,.2);}
+  .tab .icon{font-size:40px;margin-bottom:8px;}
+  .tab h2{font-size:38px;font-weight:700;}
 
-/* TOPBAR */
+  .main{display:grid;grid-template-columns:1fr 300px;gap:20px;}
+  .board{background:#000;border:1px solid var(--border);border-radius:24px;min-height:680px;overflow:hidden;}
+  .headers{display:grid;grid-template-columns:80px 1fr 200px 1fr;padding:26px 32px;color:var(--muted);font-size:30px;font-weight:600;border-bottom:1px solid var(--border);}
 
-.topbar{
-    background:linear-gradient(to right,#000000,#000000);
-    border:1px solid #121212;
-    border-radius:20px;
-    padding:20px 28px;
-    margin-bottom:22px;
-}
+  .player-row{display:grid;grid-template-columns:80px 1fr 200px 1fr;padding:22px 32px;border-bottom:1px solid #0d0d0d;align-items:center;transition:.15s;}
+  .player-row:hover{background:#0d0d0d;}
+  .rank{font-size:32px;font-weight:800;color:var(--muted);}
+  .rank.r1{color:#FFD700;}
+  .rank.r2{color:#C0C0C0;}
+  .rank.r3{color:#CD7F32;}
+  .player-name{font-size:32px;font-weight:700;}
+  .region{font-size:26px;color:var(--sub);}
+  .tiers{display:flex;gap:10px;flex-wrap:wrap;}
+  .tier-badge{font-size:22px;font-weight:700;padding:4px 14px;border-radius:8px;background:#111;}
 
-.logo{
-    font-size:54px;
-    font-weight:800;
-    color:#ffb347;
-    letter-spacing:2px;
-}
+  .ht1{color:#F7C725;} .lt1{color:#C7A63C;}
+  .ht2{color:#2C25F7;} .lt2{color:#3E3CC7;}
+  .ht3{color:#ff9d47;} .lt3{color:#ffb14a;}
+  .ht4{color:#9b7cff;} .lt4{color:#8c97b5;}
+  .ht5{color:#ff5c7d;} .lt5{color:#d3d9e7;}
 
-/* TABS */
+  .empty{height:580px;display:flex;justify-content:center;align-items:center;flex-direction:column;text-align:center;}
+  .empty h1{font-size:60px;margin-bottom:14px;}
+  .empty p{color:var(--sub);font-size:26px;max-width:560px;line-height:1.5;}
 
-.tabs{
-    display:flex;
-    gap:18px;
-    margin-bottom:22px;
-    flex-wrap:wrap;
-}
+  .side{background:#000;border:1px solid var(--border);border-radius:24px;padding:24px;height:fit-content;}
+  .side-title{font-size:40px;font-weight:800;margin-bottom:22px;}
+  .point{background:#111;border-radius:14px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:24px;}
+  .point b{font-weight:800;}
 
-.tab{
-    width:210px;
-    height:135px;
-    background:linear-gradient(to bottom,#000000,#000000);
-    border:1px solid #121212;
-    border-radius:26px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    cursor:pointer;
-    transition:0.2s;
-}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:flex;align-items:center;justify-content:center;}
+  .modal{background:#0f0f0f;border:1px solid var(--border);border-radius:28px;padding:50px;width:700px;max-width:90vw;}
+  .modal h2{font-size:42px;font-weight:800;margin-bottom:10px;}
+  .modal p{color:var(--sub);font-size:26px;margin-bottom:36px;}
+  .field{margin-bottom:22px;}
+  .field label{display:block;font-size:24px;color:var(--sub);margin-bottom:10px;}
+  .field input,select{width:100%;background:#000;border:1px solid var(--border);border-radius:14px;padding:18px 22px;color:#fff;font-size:28px;}
+  .field input:focus,select:focus{outline:none;border-color:var(--gold);}
+  .btn-row{display:flex;gap:14px;margin-top:30px;}
+  .btn{flex:1;padding:22px;border-radius:14px;font-size:26px;font-weight:700;cursor:pointer;border:none;transition:.2s;}
+  .btn-primary{background:var(--gold);color:#000;}
+  .btn-primary:hover{background:#e0a020;}
+  .btn-cancel{background:#1a1a1a;color:var(--sub);border:1px solid var(--border);}
+  .btn-cancel:hover{border-color:#666;color:#fff;}
+  .btn-danger{background:#3a0000;color:#ff5555;border:1px solid #550000;}
+  .btn-danger:hover{background:#550000;}
+  .err{color:#ff5555;font-size:22px;margin-top:10px;}
 
-.tab:hover{
-    transform:translateY(-4px);
-    border-color:#E8E8E8;
-}
+  .admin-panel{background:#000;border:1px solid var(--gold);border-radius:24px;padding:28px;margin-bottom:20px;}
+  .admin-panel-title{font-size:34px;font-weight:800;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:12px;}
+  .ap-row{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;}
+  .ap-field{flex:1;min-width:160px;}
+  .ap-field label{display:block;font-size:22px;color:var(--sub);margin-bottom:8px;}
+  .ap-field input,select{width:100%;background:#0a0a0a;border:1px solid var(--border);border-radius:12px;padding:14px 18px;color:#fff;font-size:24px;}
+  .ap-field input:focus,select:focus{outline:none;border-color:var(--gold);}
+  .btn-sm{padding:14px 22px;border-radius:12px;font-size:22px;font-weight:700;cursor:pointer;border:none;transition:.2s;}
+  .btn-add{background:var(--gold);color:#000;}
+  .btn-add:hover{background:#e0a020;}
 
-.tab.active{
-    border:2px solid #f6b327;
-    box-shadow:0 0 25px rgba(246,179,39,0.25);
-}
+  .player-edit-row{display:flex;align-items:center;gap:12px;background:#0d0d0d;border-radius:14px;padding:16px 18px;margin-bottom:10px;}
+  .pname{font-size:24px;font-weight:700;flex:1;}
+  .btn-edit-ico{background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--sub);font-size:22px;padding:8px 16px;cursor:pointer;}
+  .btn-edit-ico:hover{border-color:var(--gold);color:var(--gold);}
+  .btn-del-ico{background:transparent;border:1px solid #330000;border-radius:10px;color:#ff5555;font-size:22px;padding:8px 16px;cursor:pointer;}
+  .btn-del-ico:hover{background:#200000;}
 
-.tab .icon{
-    font-size:42px;
-    margin-bottom:10px;
-}
-
-.tab h2{
-    font-size:42px;
-    font-weight:700;
-}
-
-/* MAIN */
-
-.main{
-    display:grid;
-    grid-template-columns:1fr 320px;
-    gap:22px;
-}
-
-/* BOARD */
-
-.board{
-    background:linear-gradient(to bottom,#000000,#000000);
-    border:1px solid #121212;
-    border-radius:24px;
-    min-height:700px;
-    overflow:hidden;
-}
-
-/* HEADERS */
-
-.headers{
-    display:grid;
-    grid-template-columns:100px 1fr 220px 380px;
-    padding:28px 34px;
-    color:#404040;
-    font-size:32px;
-    font-weight:600;
-    border-bottom:1px solid #121212;
-}
-
-/* EMPTY STATE */
-
-.empty{
-    height:600px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    text-align:center;
-}
-
-.empty h1{
-    font-size:62px;
-    margin-bottom:16px;
-    color:#ffffff;
-}
-
-.empty p{
-    color:#7184a7;
-    font-size:28px;
-    max-width:600px;
-    line-height:1.5;
-}
-
-/* SIDE PANEL */
-
-.side{
-    background:linear-gradient(to bottom,#000000,#000000);
-    border:1px solid #121212;
-    border-radius:24px;
-    padding:26px;
-    height:fit-content;
-}
-
-.side-title{
-    font-size:42px;
-    font-weight:800;
-    margin-bottom:24px;
-    display:flex;
-    align-items:center;
-    gap:12px;
-}
-
-.point{
-    background:#121212;
-    border-radius:16px;
-    padding:18px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:14px;
-    font-size:26px;
-}
-
-.point b{
-    font-weight:800;
-}
-
-/* COLORS */
-
-.ht1{color:#F7C725;}
-.lt1{color:#C7A63C;}
-.ht2{color:#2C25F7;}
-.lt2{color:#3E3CC7;}
-.ht3{color:#ff9d47;}
-.lt3{color:#ffb14a;}
-.ht4{color:#9b7cff;}
-.lt4{color:#8c97b5;}
-.ht5{color:#ff5c7d;}
-.lt5{color:#d3d9e7;}
-
-/* MOBILE */
-
-@media(max-width:1400px){
-
-    .main{
-        grid-template-columns:1fr;
-    }
-
-}
-
-@media(max-width:900px){
-
-    .headers{
-        grid-template-columns:1fr;
-        gap:15px;
-    }
-
-    .tab{
-        width:100%;
-    }
-
-}
-
+  select option{background:#0f0f0f;}
 </style>
-</head>
-<body>
-
-<!-- TOPBAR -->
 
 <div class="topbar">
-
-    <div class="logo">RONSMP RANKED</div>
-
+  <div class="logo">RONSMP RANKED</div>
+  <button class="admin-btn" id="adminToggle" onclick="openLogin()">⚙ Admin</button>
 </div>
-
-<!-- TABS -->
 
 <div class="tabs">
-
-    <div class="tab active">
-        <div class="icon">🏆</div>
-        <h2>Overall</h2>
-    </div>
-
-    <div class="tab">
-        <div class="icon">⚔️</div>
-        <h2>Sword</h2>
-    </div>
-
-    <div class="tab">
-        <div class="icon">❤️</div>
-        <h2>UHC</h2>
-    </div>
-
-    <div class="tab">
-        <div class="icon">💀</div>
-        <h2>SMP</h2>
-    </div>
-
-    <div class="tab">
-        <div class="icon">🔨</div>
-        <h2>Mace</h2>
-    </div>
-
+  <div class="tab active" onclick="setTab(this,'Overall')"><div class="icon">🏆</div><h2>Overall</h2></div>
+  <div class="tab" onclick="setTab(this,'Sword')"><div class="icon">⚔️</div><h2>Sword</h2></div>
+  <div class="tab" onclick="setTab(this,'UHC')"><div class="icon">❤️</div><h2>UHC</h2></div>
+  <div class="tab" onclick="setTab(this,'SMP')"><div class="icon">💀</div><h2>SMP</h2></div>
+  <div class="tab" onclick="setTab(this,'Mace')"><div class="icon">🔨</div><h2>Mace</h2></div>
 </div>
 
-<!-- MAIN -->
+<div id="adminPanel" style="display:none;">
+  <div class="admin-panel">
+    <div class="admin-panel-title">⚙ Admin Panel — editing as <span id="editingAs" style="color:#fff;margin-left:8px;"></span>
+      <button class="btn-sm" style="background:#1a1a1a;color:var(--sub);border:1px solid var(--border);margin-left:auto;font-size:20px;" onclick="logout()">Log out</button>
+    </div>
+    <div class="ap-row">
+      <div class="ap-field"><label>Player name</label><input id="newName" placeholder="e.g. Steve" /></div>
+      <div class="ap-field"><label>Region</label>
+        <select id="newRegion">
+          <option>NA</option><option>EU</option><option>AS</option><option>SA</option><option>OC</option>
+        </select>
+      </div>
+      <div class="ap-field" style="max-width:160px;"><label>Sword tier</label>
+        <select id="newSword"><option value="">—</option>
+          <option>HT1</option><option>LT1</option><option>HT2</option><option>LT2</option>
+          <option>HT3</option><option>LT3</option><option>HT4</option><option>LT4</option>
+          <option>HT5</option><option>LT5</option>
+        </select>
+      </div>
+      <div class="ap-field" style="max-width:160px;"><label>UHC tier</label>
+        <select id="newUHC"><option value="">—</option>
+          <option>HT1</option><option>LT1</option><option>HT2</option><option>LT2</option>
+          <option>HT3</option><option>LT3</option><option>HT4</option><option>LT4</option>
+          <option>HT5</option><option>LT5</option>
+        </select>
+      </div>
+      <div class="ap-field" style="max-width:160px;"><label>SMP tier</label>
+        <select id="newSMP"><option value="">—</option>
+          <option>HT1</option><option>LT1</option><option>HT2</option><option>LT2</option>
+          <option>HT3</option><option>LT3</option><option>HT4</option><option>LT4</option>
+          <option>HT5</option><option>LT5</option>
+        </select>
+      </div>
+      <div class="ap-field" style="max-width:160px;"><label>Mace tier</label>
+        <select id="newMace"><option value="">—</option>
+          <option>HT1</option><option>LT1</option><option>HT2</option><option>LT2</option>
+          <option>HT3</option><option>LT3</option><option>HT4</option><option>LT4</option>
+          <option>HT5</option><option>LT5</option>
+        </select>
+      </div>
+      <div class="ap-field" style="max-width:120px;align-self:flex-end;">
+        <button class="btn-sm btn-add" onclick="addPlayer()" style="width:100%;padding:14px;">+ Add</button>
+      </div>
+    </div>
+    <div id="addErr" class="err"></div>
+    <div id="playerEditList" style="margin-top:24px;"></div>
+  </div>
+</div>
 
 <div class="main">
-
-    <!-- LEADERBOARD -->
-
-    <div class="board">
-
-        <div class="headers">
-
-            <div>#</div>
-
-            <div>PLAYER</div>
-
-            <div>REGION</div>
-
-            <div>TIERS</div>
-
-        </div>
-
-        <div class="empty">
-
-            <h1>No Players Yet</h1>
-
-            <p>
-                Players will appear here once added manually
-                through the website code.
-            </p>
-
-        </div>
-
-    </div>
-
-    <!-- SIDE PANEL -->
-
-    <div class="side">
-
-        <div class="side-title">
-            ⭐ Tier Point Values
-        </div>
-
-        <div class="point">
-            <b class="ht1">HT1</b>
-            <span>60 Points</span>
-        </div>
-
-        <div class="point">
-            <b class="lt1">LT1</b>
-            <span>45 Points</span>
-        </div>
-
-        <div class="point">
-            <b class="ht2">HT2</b>
-            <span>30 Points</span>
-        </div>
-
-        <div class="point">
-            <b class="lt2">LT2</b>
-            <span>15 Points</span>
-        </div>
-
-        <div class="point">
-            <b class="ht3">HT3</b>
-            <span>10 Points</span>
-        </div>
-
-        <div class="point">
-            <b class="lt3">LT3</b>
-            <span>6 Points</span>
-        </div>
-
-        <div class="point">
-            <b class="ht4">HT4</b>
-            <span>4 Points</span>
-        </div>
-
-        <div class="point">
-            <b class="lt4">LT4</b>
-            <span>3 Points</span>
-        </div>
-
-        <div class="point">
-            <b class="ht5">HT5</b>
-            <span>2 Points</span>
-        </div>
-
-        <div class="point">
-            <b class="lt5">LT5</b>
-            <span>1 Point</span>
-        </div>
-
-    </div>
-
+  <div class="board">
+    <div class="headers"><div>#</div><div>PLAYER</div><div>REGION</div><div>TIERS</div></div>
+    <div id="boardBody"></div>
+  </div>
+  <div class="side">
+    <div class="side-title">⭐ Tier Point Values</div>
+    <div class="point"><b class="ht1">HT1</b><span>60 Points</span></div>
+    <div class="point"><b class="lt1">LT1</b><span>45 Points</span></div>
+    <div class="point"><b class="ht2">HT2</b><span>30 Points</span></div>
+    <div class="point"><b class="lt2">LT2</b><span>15 Points</span></div>
+    <div class="point"><b class="ht3">HT3</b><span>10 Points</span></div>
+    <div class="point"><b class="lt3">LT3</b><span>6 Points</span></div>
+    <div class="point"><b class="ht4">HT4</b><span>4 Points</span></div>
+    <div class="point"><b class="lt4">LT4</b><span>3 Points</span></div>
+    <div class="point"><b class="ht5">HT5</b><span>2 Points</span></div>
+    <div class="point"><b class="lt5">LT5</b><span>1 Point</span></div>
+  </div>
 </div>
 
-</body>
-</html>
+<div class="overlay" id="overlay" style="display:none;">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<script>
+const TIER_PTS = {HT1:60,LT1:45,HT2:30,LT2:15,HT3:10,LT3:6,HT4:4,LT4:3,HT5:2,LT5:1};
+const WHITELIST = {
+  "Ron":     "admin123",
+  "Moderator": "mod456",
+  "Staff":   "staff789"
+};
+
+let currentTab = "Overall";
+let loggedInUser = null;
+let players = [];
+let editingIndex = null;
+
+async function loadPlayers(){
+  try{
+    const r = await window.storage.get("ronsmp_players");
+    if(r) players = JSON.parse(r.value);
+  }catch(e){ players=[]; }
+  renderBoard();
+}
+
+async function savePlayers(){
+  try{ await window.storage.set("ronsmp_players", JSON.stringify(players)); }catch(e){}
+}
+
+function calcScore(p){
+  let s=0;
+  ["Sword","UHC","SMP","Mace"].forEach(k=>{ if(p.tiers[k]) s+=TIER_PTS[p.tiers[k]]||0; });
+  return s;
+}
+
+function setTab(el, name){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+  currentTab = name;
+  renderBoard();
+}
+
+function renderBoard(){
+  const body = document.getElementById("boardBody");
+  let list = [...players];
+
+  if(currentTab !== "Overall"){
+    list = list.filter(p => p.tiers[currentTab]);
+    list.sort((a,b)=>(TIER_PTS[b.tiers[currentTab]]||0)-(TIER_PTS[a.tiers[currentTab]]||0));
+  } else {
+    list.sort((a,b)=>calcScore(b)-calcScore(a));
+  }
+
+  if(list.length === 0){
+    body.innerHTML = `<div class="empty"><h1>No Players Yet</h1><p>Players will appear here once added through the Admin panel.</p></div>`;
+    return;
+  }
+
+  body.innerHTML = list.map((p,i)=>{
+    const rankCls = i===0?"rank r1":i===1?"rank r2":i===2?"rank r3":"rank";
+    const tierKeys = currentTab==="Overall" ? ["Sword","UHC","SMP","Mace"] : [currentTab];
+    const badges = tierKeys.filter(k=>p.tiers[k]).map(k=>`<span class="tier-badge ${p.tiers[k].toLowerCase()}">${p.tiers[k]}<span style="font-size:18px;color:#555;margin-left:4px;">${k[0]}</span></span>`).join("");
+    return `<div class="player-row">
+      <div class="${rankCls}">#${i+1}</div>
+      <div class="player-name">${esc(p.name)}</div>
+      <div class="region">${esc(p.region)}</div>
+      <div class="tiers">${badges||'<span style="color:#333;font-size:24px;">—</span>'}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderEditList(){
+  const el = document.getElementById("playerEditList");
+  if(!players.length){ el.innerHTML=""; return; }
+  el.innerHTML = `<div style="font-size:22px;color:var(--sub);margin-bottom:12px;">Existing players (${players.length})</div>`
+    + players.map((p,i)=>`<div class="player-edit-row">
+      <div class="pname">${esc(p.name)}</div>
+      <div style="font-size:22px;color:var(--sub);">${p.region}</div>
+      <div style="font-size:22px;color:#555;">${Object.entries(p.tiers).filter(([,v])=>v).map(([k,v])=>`<span class="${v.toLowerCase()}">${v}</span>`).join(" ")}</div>
+      <button class="btn-edit-ico" onclick="openEdit(${i})">✎ Edit</button>
+      <button class="btn-del-ico" onclick="deletePlayer(${i})">✕</button>
+    </div>`).join("");
+}
+
+function openLogin(){
+  if(loggedInUser){ logout(); return; }
+  showModal(`
+    <h2>Admin Login</h2>
+    <p>Enter your whitelisted username and password.</p>
+    <div class="field"><label>Username</label><input id="loginUser" placeholder="Username" autocomplete="off" /></div>
+    <div class="field"><label>Password</label><input id="loginPass" type="password" placeholder="Password" /></div>
+    <div id="loginErr" class="err"></div>
+    <div class="btn-row">
+      <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="doLogin()">Login</button>
+    </div>
+  `);
+  setTimeout(()=>{ const u=document.getElementById("loginUser"); if(u) u.focus(); },50);
+}
+
+function doLogin(){
+  const u = document.getElementById("loginUser").value.trim();
+  const p = document.getElementById("loginPass").value;
+  if(!WHITELIST[u]){ document.getElementById("loginErr").textContent="Username not on whitelist."; return; }
+  if(WHITELIST[u] !== p){ document.getElementById("loginErr").textContent="Incorrect password."; return; }
+  loggedInUser = u;
+  closeModal();
+  document.getElementById("editingAs").textContent = u;
+  document.getElementById("adminPanel").style.display="block";
+  document.getElementById("adminToggle").classList.add("active");
+  document.getElementById("adminToggle").textContent = "⚙ Admin ✓";
+  renderEditList();
+}
+
+function logout(){
+  loggedInUser = null;
+  document.getElementById("adminPanel").style.display="none";
+  document.getElementById("adminToggle").classList.remove("active");
+  document.getElementById("adminToggle").textContent = "⚙ Admin";
+}
+
+function addPlayer(){
+  if(!loggedInUser) return;
+  const name = document.getElementById("newName").value.trim();
+  if(!name){ document.getElementById("addErr").textContent="Player name required."; return; }
+  if(players.find(p=>p.name.toLowerCase()===name.toLowerCase())){
+    document.getElementById("addErr").textContent="Player already exists."; return;
+  }
+  document.getElementById("addErr").textContent="";
+  players.push({
+    name,
+    region: document.getElementById("newRegion").value,
+    tiers:{
+      Sword: document.getElementById("newSword").value||null,
+      UHC:   document.getElementById("newUHC").value||null,
+      SMP:   document.getElementById("newSMP").value||null,
+      Mace:  document.getElementById("newMace").value||null,
+    }
+  });
+  ["newName","newSword","newUHC","newSMP","newMace"].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value="";
+  });
+  savePlayers();
+  renderBoard();
+  renderEditList();
+}
+
+function deletePlayer(i){
+  players.splice(i,1);
+  savePlayers();
+  renderBoard();
+  renderEditList();
+}
+
+function openEdit(i){
+  editingIndex = i;
+  const p = players[i];
+  const opts = tier => ["","HT1","LT1","HT2","LT2","HT3","LT3","HT4","LT4","HT5","LT5"]
+    .map(v=>`<option value="${v}" ${p.tiers[tier]===v?"selected":""}>${v||"—"}</option>`).join("");
+  const regOpts = ["NA","EU","AS","SA","OC"].map(r=>`<option ${p.region===r?"selected":""}>${r}</option>`).join("");
+  showModal(`
+    <h2>Edit Player</h2>
+    <p>Editing: <b style="color:var(--gold)">${esc(p.name)}</b></p>
+    <div class="field"><label>Region</label><select id="eRegion">${regOpts}</select></div>
+    <div class="field"><label>Sword tier</label><select id="eSword">${opts("Sword")}</select></div>
+    <div class="field"><label>UHC tier</label><select id="eUHC">${opts("UHC")}</select></div>
+    <div class="field"><label>SMP tier</label><select id="eSMP">${opts("SMP")}</select></div>
+    <div class="field"><label>Mace tier</label><select id="eMace">${opts("Mace")}</select></div>
+    <div class="btn-row">
+      <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()">Save</button>
+    </div>
+  `);
+}
+
+function saveEdit(){
+  const p = players[editingIndex];
+  p.region = document.getElementById("eRegion").value;
+  p.tiers.Sword = document.getElementById("eSword").value||null;
+  p.tiers.UHC   = document.getElementById("eUHC").value||null;
+  p.tiers.SMP   = document.getElementById("eSMP").value||null;
+  p.tiers.Mace  = document.getElementById("eMace").value||null;
+  closeModal();
+  savePlayers();
+  renderBoard();
+  renderEditList();
+}
+
+function showModal(html){
+  document.getElementById("modalBox").innerHTML = html;
+  document.getElementById("overlay").style.display="flex";
+}
+function closeModal(){ document.getElementById("overlay").style.display="none"; }
+
+document.getElementById("overlay").addEventListener("click",function(e){
+  if(e.target===this) closeModal();
+});
+
+document.addEventListener("keydown",e=>{ if(e.key==="Enter"){
+  const li=document.getElementById("loginUser");
+  if(li && document.getElementById("overlay").style.display!=="none") doLogin();
+}});
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+loadPlayers();
+</script>
