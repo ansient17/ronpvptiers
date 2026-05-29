@@ -47,7 +47,7 @@
   .board{background:#000;border:1px solid var(--border);border-radius:24px;min-height:680px;overflow:hidden;}
   .headers{display:grid;grid-template-columns:80px 100px 1fr 160px 140px 1fr;padding:26px 32px;color:var(--muted);font-size:30px;font-weight:600;border-bottom:1px solid var(--border);}
 
-  .player-row{display:grid;grid-template-columns:80px 100px 1fr 160px 140px 1fr;padding:12px 32px;border-bottom:1px solid #0d0d0d;align-items:center;transition:.15s;}
+  .player-row{display:grid;grid-template-columns:80px 100px 1fr 160px 140px 1fr;padding:12px 32px;border-bottom:1px solid #0d0d0d;align-items:center;transition:.15s;cursor:pointer;}
   .player-row:hover{background:#0d0d0d;}
 
   .player-row.top1{background:linear-gradient(90deg,rgba(255,215,0,.10) 0%,transparent 60%);border-bottom:1px solid rgba(255,215,0,.12);}
@@ -112,22 +112,22 @@
   .tier-col-title{font-size:32px;font-weight:800;}
   .tier-col-count{font-size:20px;color:var(--sub);font-weight:600;margin-left:auto;}
 
-  /* Per-column accent colours */
-  .tcol-1{border-top:3px solid #d4a017;}
-  .tcol-2{border-top:3px solid #9b9b9b;}
-  .tcol-3{border-top:3px solid #b05a1a;}
-  .tcol-4{border-top:3px solid #3a5fad;}
-  .tcol-5{border-top:3px solid #4a8a4a;}
-  .tcol-1 .tier-col-title{color:#d4a017;}
-  .tcol-2 .tier-col-title{color:#c0c0c0;}
-  .tcol-3 .tier-col-title{color:#cd7f32;}
-  .tcol-4 .tier-col-title{color:#5b8ad4;}
-  .tcol-5 .tier-col-title{color:#6aaa6a;}
-  .tcol-1 .tier-col-header{background:rgba(212,160,23,.06);}
-  .tcol-2 .tier-col-header{background:rgba(192,192,192,.05);}
-  .tcol-3 .tier-col-header{background:rgba(205,127,50,.06);}
-  .tcol-4 .tier-col-header{background:rgba(91,138,212,.05);}
-  .tcol-5 .tier-col-header{background:rgba(106,170,106,.04);}
+  /* Per-column accent colours: Tier1=Gold, Tier2=Blue, Tier3=Orange, Tier4=Red, Tier5=Grey */
+  .tcol-1{border-top:3px solid #F7C725;}
+  .tcol-2{border-top:3px solid #5b58ff;}
+  .tcol-3{border-top:3px solid #ff9d47;}
+  .tcol-4{border-top:3px solid #e03030;}
+  .tcol-5{border-top:3px solid #aaaaaa;}
+  .tcol-1 .tier-col-title{color:#F7C725;}
+  .tcol-2 .tier-col-title{color:#5b58ff;}
+  .tcol-3 .tier-col-title{color:#ff9d47;}
+  .tcol-4 .tier-col-title{color:#e03030;}
+  .tcol-5 .tier-col-title{color:#aaaaaa;}
+  .tcol-1 .tier-col-header{background:rgba(247,199,37,.06);}
+  .tcol-2 .tier-col-header{background:rgba(91,88,255,.05);}
+  .tcol-3 .tier-col-header{background:rgba(255,157,71,.06);}
+  .tcol-4 .tier-col-header{background:rgba(224,48,48,.05);}
+  .tcol-5 .tier-col-header{background:rgba(170,170,170,.04);}
 
   /* Each player row */
   .tier-player-item{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid #111;transition:.12s;cursor:default;}
@@ -219,7 +219,7 @@
   .profile-avatar-wrap img{height:175px;width:auto;image-rendering:pixelated;}
   .profile-name{font-size:68px;font-weight:800;text-align:center;}
   .profile-region{font-size:26px;color:var(--sub);text-align:center;}
-  .profile-namemc{display:inline-flex;align-items:center;gap:10px;background:#111;border:1px solid var(--border);border-radius:12px;padding:8px 20px;font-size:22px;color:var(--sub);text-decoration:none;transition:.15s;}
+  .profile-namemc{display:inline-flex;align-items:center;gap:10px;background:#111;border:1px solid var(--border);border-radius:12px;padding:8px 20px;font-size:22px;color:var(--sub);cursor:pointer;font-family:inherit;transition:.15s;}
   .profile-namemc:hover{border-color:#888;color:#fff;}
   .profile-body{padding:40px 60px 50px;}
   .profile-section-title{font-size:28px;font-weight:800;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;}
@@ -395,9 +395,9 @@ function openSettings(e){
 function closeSettings(){document.getElementById("settingsOverlay").classList.remove("open");document.getElementById("settingsBtn").classList.remove("active");}
 function handleSettingsOverlayClick(e){if(e.target===document.getElementById("settingsOverlay"))closeSettings();}
 
-/* ── UPDATED: mc-heads.net skin API (username-based, no UUID needed) ── */
+/* ── Bust skin: shows head + upper torso ── */
 function skinHTML(name, size){
-  return `<img src="https://mc-heads.net/body/${encodeURIComponent(name)}/100" alt="" loading="lazy" style="height:${size}px;width:auto;image-rendering:pixelated;" onerror="this.style.display='none'"/>`;
+  return `<img src="https://mc-heads.net/bust/${encodeURIComponent(name)}/100" alt="" loading="lazy" style="height:${size}px;width:auto;image-rendering:pixelated;" onerror="this.style.display='none'"/>`;
 }
 
 /* Chevron badge for top 3 */
@@ -430,10 +430,10 @@ function renderOverall(){
     else if(i===2) skinCol=chevronSkin(p.name,"c3");
     else skinCol=`<div class="skin-wrap">${skinHTML(p.name,72)}</div>`;
 
-    return `<div class="${rowCls}">
+    return `<div class="${rowCls}" onclick="openProfile('${esc(p.name).replace(/'/g,"\\'")}');" style="cursor:pointer;">
       <div class="${rankCls}">#${i+1}</div>
       ${skinCol}
-      <div class="player-name"><a href="#" onclick="event.preventDefault();openProfile('${esc(p.name).replace(/'/g,"\\'")}');" style="color:inherit;text-decoration:none;cursor:pointer;" onmouseover="this.style.color='#f6b327'" onmouseout="this.style.color='#ffffff'">${esc(p.name)}</a></div>
+      <div class="player-name">${esc(p.name)}</div>
       <div class="region">${esc(p.region)}</div>
       <div class="points-col">${pts}</div>
       <div class="tiers">${badges||'<span style="color:#333;font-size:24px;">—</span>'}</div>
@@ -454,11 +454,9 @@ function renderCategoryTiers(cat){
   const htChevron=`<div class="tier-chevron chev-ht">${chevSVG}${chevSVG}</div>`;
   const ltChevron=`<div class="tier-chevron chev-lt">${chevSVG}</div>`;
 
-  const makeRow=(p,isHT)=>`<div class="tier-player-item ${isHT?'is-ht':'is-lt'}">
+  const makeRow=(p,isHT)=>`<div class="tier-player-item ${isHT?'is-ht':'is-lt'}" onclick="openProfile('${esc(p.name).replace(/'/g,"\\'")}');" style="cursor:pointer;">
     <div class="tier-player-skin">${skinHTML(p.name,46)}</div>
-    <div class="tier-player-name">
-      <a href="#" onclick="event.preventDefault();openProfile('${esc(p.name).replace(/'/g,"\\'")}');" style="text-decoration:none;cursor:pointer;">${esc(p.name)}</a>
-    </div>
+    <div class="tier-player-name">${esc(p.name)}</div>
     ${isHT?htChevron:ltChevron}
   </div>`;
 
@@ -576,14 +574,14 @@ function openProfile(name){
 
   document.getElementById("profileHeader").innerHTML=`
     <div class="profile-avatar-wrap">
-      <img src="https://mc-heads.net/body/${encodeURIComponent(name)}/100" alt="" onerror="this.style.display='none'"/>
+      <img src="https://mc-heads.net/bust/${encodeURIComponent(name)}/100" alt="" onerror="this.style.display='none'" style="height:175px;width:auto;image-rendering:pixelated;object-fit:cover;object-position:top;"/>
     </div>
     <div class="profile-name">${esc(name)}</div>
     <div class="profile-region">${esc(p.region)}</div>
-    <a href="https://namemc.com/profile/${encodeURIComponent(name)}" target="_blank" class="profile-namemc">
+    <button class="profile-namemc" onclick="window.open('https://namemc.com/profile/${encodeURIComponent(name)}','_blank')">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
       NameMC ↗
-    </a>`;
+    </button>`;
 
   const tiersHtml=["Sword","UHC","SMP","Mace"].map(cat=>{
     const val=p.tiers[cat];
