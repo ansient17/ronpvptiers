@@ -187,14 +187,8 @@
 <script>
 const TIER_PTS = {HT1:60,LT1:45,HT2:30,LT2:15,HT3:10,LT3:6,HT4:4,LT4:3,HT5:2,LT5:1};
 
-// -------------------------------------------------------
-// WHITELIST — hashed passwords (SHA-256)
-// To generate a hash, open browser console and run:
-//   hashPassword("yourpassword").then(console.log)
-// Then paste the result here.
-// -------------------------------------------------------
 const WHITELIST = {
-  "Account": "0240e1c18562ca5658c49f07a7df2c4f36492c1ede82cd4ea5f267b7c630e50a",
+  "Account": "988566e8018c27752687cbb5d49ebb329e72313c0d6588f7465fc2027a9e3d86",
 };
 
 let currentTab = "Overall";
@@ -202,13 +196,11 @@ let loggedInUser = null;
 let players = [];
 let editingIndex = null;
 
-// SHA-256 helper
 async function hashPassword(p){
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(p));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
 }
 
-// localStorage persistence
 function loadPlayers(){
   try{
     const data = localStorage.getItem("ronsmp_players");
