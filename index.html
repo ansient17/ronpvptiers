@@ -1,4 +1,11 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RONSMP RANKED</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
   :root{
@@ -88,6 +95,8 @@
 
   select option{background:#0f0f0f;}
 </style>
+</head>
+<body>
 
 <div class="topbar">
   <div class="logo">RONSMP RANKED</div>
@@ -177,8 +186,15 @@
 
 <script>
 const TIER_PTS = {HT1:60,LT1:45,HT2:30,LT2:15,HT3:10,LT3:6,HT4:4,LT4:3,HT5:2,LT5:1};
+
+// -------------------------------------------------------
+// WHITELIST — hashed passwords (SHA-256)
+// To generate a hash, open browser console and run:
+//   hashPassword("yourpassword").then(console.log)
+// Then paste the result here.
+// -------------------------------------------------------
 const WHITELIST = {
-  "Account":     "0240e1c18562ca5658c49f07a7df2c4f36492c1ede82cd4ea5f267b7c630e50a",
+  "Account": "0240e1c18562ca5658c49f07a7df2c4f36492c1ede82cd4ea5f267b7c630e50a",
 };
 
 let currentTab = "Overall";
@@ -186,16 +202,23 @@ let loggedInUser = null;
 let players = [];
 let editingIndex = null;
 
-async function loadPlayers(){
+// SHA-256 helper
+async function hashPassword(p){
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(p));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+
+// localStorage persistence
+function loadPlayers(){
   try{
-    const r = await window.storage.get("ronsmp_players");
-    if(r) players = JSON.parse(r.value);
+    const data = localStorage.getItem("ronsmp_players");
+    if(data) players = JSON.parse(data);
   }catch(e){ players=[]; }
   renderBoard();
 }
 
-async function savePlayers(){
-  try{ await window.storage.set("ronsmp_players", JSON.stringify(players)); }catch(e){}
+function savePlayers(){
+  try{ localStorage.setItem("ronsmp_players", JSON.stringify(players)); }catch(e){}
 }
 
 function calcScore(p){
@@ -269,11 +292,12 @@ function openLogin(){
   setTimeout(()=>{ const u=document.getElementById("loginUser"); if(u) u.focus(); },50);
 }
 
-function doLogin(){
+async function doLogin(){
   const u = document.getElementById("loginUser").value.trim();
   const p = document.getElementById("loginPass").value;
   if(!WHITELIST[u]){ document.getElementById("loginErr").textContent="Username not on whitelist."; return; }
-  if(WHITELIST[u] !== p){ document.getElementById("loginErr").textContent="Incorrect password."; return; }
+  const hash = await hashPassword(p);
+  if(WHITELIST[u] !== hash){ document.getElementById("loginErr").textContent="Incorrect password."; return; }
   loggedInUser = u;
   closeModal();
   document.getElementById("editingAs").textContent = u;
@@ -376,3 +400,5 @@ function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").rep
 
 loadPlayers();
 </script>
+</body>
+</html>
