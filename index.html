@@ -342,9 +342,9 @@ async function fetchUUIDs(){
   const names = players.map(p=>p.name).filter(n=>!uuidCache[n.toLowerCase()]);
   await Promise.all(names.map(async name => {
     try{
-      const r = await fetch(`https://api.minetools.eu/uuid/${encodeURIComponent(name)}`);
+      const r = await fetch(`https://api.ashcon.app/mojang/v2/user/${encodeURIComponent(name)}`);
       const data = await r.json();
-      if(data && data.id) uuidCache[name.toLowerCase()] = data.id.replace(/-/g,"");
+      if(data && data.uuid) uuidCache[name.toLowerCase()] = data.uuid.replace(/-/g,"");
     }catch(e){}
   }));
   renderBoard();
@@ -538,15 +538,19 @@ async function addPlayer(){
 
   let resolvedName = name;
   try {
-    const r = await fetch(`https://api.minetools.eu/uuid/${encodeURIComponent(name)}`);
+    const r = await fetch(`https://api.ashcon.app/mojang/v2/user/${encodeURIComponent(name)}`);
+    if(r.status === 404){
+      document.getElementById("addErr").textContent = `"${name}" is not a valid Minecraft account.`;
+      addBtn.disabled = false; addBtn.textContent = "+ Add"; return;
+    }
     const data = await r.json();
-    if(!data || !data.id || data.id === "0" || data.status === "ERR"){
+    if(!data || !data.uuid){
       document.getElementById("addErr").textContent = `"${name}" is not a valid Minecraft account.`;
       addBtn.disabled = false; addBtn.textContent = "+ Add"; return;
     }
     // Use the correctly-cased name returned by the API
-    if(data.name) resolvedName = data.name;
-    uuidCache[resolvedName.toLowerCase()] = data.id.replace(/-/g,"");
+    if(data.username) resolvedName = data.username;
+    uuidCache[resolvedName.toLowerCase()] = data.uuid.replace(/-/g,"");
   } catch(e) {
     document.getElementById("addErr").textContent = "Could not verify account — check your connection.";
     addBtn.disabled = false; addBtn.textContent = "+ Add"; return;
