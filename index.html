@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MCTiers Rankings</title>
+<title>RONTIERS</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 
@@ -18,78 +18,69 @@
 }
 
 body{
-    background:#07111f;
+    background:#040b16;
     color:white;
-    padding:20px;
+    padding:18px;
 }
 
 /* TOPBAR */
 
 .topbar{
-    background:#0c1627;
-    border:1px solid #15253f;
-    border-radius:18px;
-    padding:18px 25px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:25px;
+    background:linear-gradient(to right,#07111f,#081526);
+    border:1px solid #13233d;
+    border-radius:20px;
+    padding:20px 28px;
+    margin-bottom:22px;
 }
 
 .logo{
-    font-size:34px;
+    font-size:54px;
     font-weight:800;
     color:#ffb347;
+    letter-spacing:2px;
 }
 
-.nav{
-    display:flex;
-    gap:30px;
-    color:#8ea4c9;
-    font-weight:600;
-}
-
-.search{
-    background:#121f35;
-    border:none;
-    border-radius:12px;
-    padding:12px 18px;
-    color:white;
-    width:230px;
-}
-
-/* GAMEMODE TABS */
+/* TABS */
 
 .tabs{
     display:flex;
-    gap:15px;
-    margin-bottom:25px;
-    overflow-x:auto;
+    gap:18px;
+    margin-bottom:22px;
+    flex-wrap:wrap;
 }
 
 .tab{
-    min-width:120px;
-    background:#0c1627;
-    border:1px solid #15253f;
-    border-radius:22px;
-    padding:18px;
-    text-align:center;
-    transition:0.2s;
+    width:210px;
+    height:135px;
+    background:linear-gradient(to bottom,#07111f,#081425);
+    border:1px solid #173056;
+    border-radius:26px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
     cursor:pointer;
+    transition:0.2s;
 }
 
 .tab:hover{
-    transform:translateY(-3px);
-    border-color:#3f67b1;
+    transform:translateY(-4px);
+    border-color:#3d68af;
 }
 
 .tab.active{
-    border-color:#ffc74d;
+    border:2px solid #f6b327;
+    box-shadow:0 0 25px rgba(246,179,39,0.25);
 }
 
-.tab h3{
-    margin-top:8px;
-    font-size:20px;
+.tab .icon{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.tab h2{
+    font-size:42px;
+    font-weight:700;
 }
 
 /* MAIN */
@@ -97,140 +88,105 @@ body{
 .main{
     display:grid;
     grid-template-columns:1fr 320px;
-    gap:25px;
+    gap:22px;
 }
 
-/* LEADERBOARD */
+/* BOARD */
 
 .board{
-    background:#0c1627;
-    border:1px solid #15253f;
-    border-radius:20px;
+    background:linear-gradient(to bottom,#07111f,#081425);
+    border:1px solid #13233d;
+    border-radius:24px;
+    min-height:700px;
     overflow:hidden;
 }
 
-.row{
+/* HEADERS */
+
+.headers{
     display:grid;
-    grid-template-columns:90px 1.4fr 120px 1fr;
-    align-items:center;
-    padding:18px;
-    border-bottom:1px solid #13233d;
-    transition:0.2s;
+    grid-template-columns:100px 1fr 220px 380px;
+    padding:28px 34px;
+    color:#6e83a8;
+    font-size:32px;
+    font-weight:600;
+    border-bottom:1px solid #12243f;
 }
 
-.row:hover{
-    background:#101e35;
-}
+/* EMPTY STATE */
 
-.rank{
-    font-size:42px;
-    font-weight:800;
-    color:#f7c34d;
-}
-
-.player{
+.empty{
+    height:600px;
     display:flex;
+    justify-content:center;
     align-items:center;
-    gap:16px;
-}
-
-.player img{
-    width:64px;
-    height:64px;
-    border-radius:12px;
-}
-
-.player-info h2{
-    font-size:30px;
-}
-
-.player-info p{
-    color:#7f95b8;
-    margin-top:4px;
-}
-
-.region{
-    display:inline-block;
-    padding:10px 14px;
-    border-radius:10px;
-    font-weight:700;
+    flex-direction:column;
     text-align:center;
 }
 
-.na{
-    background:#5f2632;
-    color:#ff6f8d;
+.empty h1{
+    font-size:62px;
+    margin-bottom:16px;
+    color:#ffffff;
 }
 
-.eu{
-    background:#214b2c;
-    color:#79ff9f;
+.empty p{
+    color:#7184a7;
+    font-size:28px;
+    max-width:600px;
+    line-height:1.5;
 }
-
-/* TIER ICONS */
-
-.tiers{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-}
-
-.tier{
-    background:#121f35;
-    border-radius:12px;
-    padding:10px 12px;
-    text-align:center;
-    min-width:62px;
-}
-
-.tier span{
-    display:block;
-    font-size:13px;
-    margin-top:4px;
-    color:#89a1c8;
-}
-
-.ht1{border:2px solid gold;}
-.lt1{border:2px solid #4fa3ff;}
-.ht2{border:2px solid #d567ff;}
-.lt2{border:2px solid #6fd2ff;}
-.ht3{border:2px solid #ff914d;}
-.lt3{border:2px solid #ffae57;}
-.ht4{border:2px solid #9f7fff;}
-.lt4{border:2px solid #7b8ca5;}
-.ht5{border:2px solid #ff5e7a;}
-.lt5{border:2px solid #b5c0d1;}
 
 /* SIDE PANEL */
 
 .side{
-    background:#0c1627;
-    border:1px solid #15253f;
-    border-radius:20px;
-    padding:25px;
+    background:linear-gradient(to bottom,#07111f,#081425);
+    border:1px solid #13233d;
+    border-radius:24px;
+    padding:26px;
     height:fit-content;
 }
 
-.side h2{
-    margin-bottom:20px;
+.side-title{
+    font-size:42px;
+    font-weight:800;
+    margin-bottom:24px;
+    display:flex;
+    align-items:center;
+    gap:12px;
 }
 
 .point{
+    background:#0d1b31;
+    border-radius:16px;
+    padding:18px 20px;
     display:flex;
     justify-content:space-between;
-    padding:12px;
-    background:#121f35;
-    border-radius:12px;
-    margin-bottom:12px;
+    align-items:center;
+    margin-bottom:14px;
+    font-size:26px;
 }
 
-.label{
-    font-weight:700;
+.point b{
+    font-weight:800;
 }
+
+/* COLORS */
+
+.ht1{color:#ffd84d;}
+.lt1{color:#49a5ff;}
+.ht2{color:#d567ff;}
+.lt2{color:#64d7ff;}
+.ht3{color:#ff9d47;}
+.lt3{color:#ffb14a;}
+.ht4{color:#9b7cff;}
+.lt4{color:#8c97b5;}
+.ht5{color:#ff5c7d;}
+.lt5{color:#d3d9e7;}
 
 /* MOBILE */
 
-@media(max-width:1200px){
+@media(max-width:1400px){
 
     .main{
         grid-template-columns:1fr;
@@ -240,9 +196,13 @@ body{
 
 @media(max-width:900px){
 
-    .row{
+    .headers{
         grid-template-columns:1fr;
-        gap:20px;
+        gap:15px;
+    }
+
+    .tab{
+        width:100%;
     }
 
 }
@@ -251,155 +211,135 @@ body{
 </head>
 <body>
 
+<!-- TOPBAR -->
+
 <div class="topbar">
 
-    <div class="logo">MCTIERS</div>
-
-    <div class="nav">
-        <div>Home</div>
-        <div>Rankings</div>
-        <div>Discords</div>
-        <div>API Docs</div>
-    </div>
-
-    <input class="search" placeholder="Search player...">
+    <div class="logo">RONTIERS</div>
 
 </div>
+
+<!-- TABS -->
 
 <div class="tabs">
 
     <div class="tab active">
-        🏆
-        <h3>Overall</h3>
+        <div class="icon">🏆</div>
+        <h2>Overall</h2>
     </div>
 
     <div class="tab">
-        ⚔
-        <h3>LTMs</h3>
+        <div class="icon">⚔</div>
+        <h2>Sword</h2>
     </div>
 
     <div class="tab">
-        🛡
-        <h3>Vanilla</h3>
+        <div class="icon">❤</div>
+        <h2>UHC</h2>
     </div>
 
     <div class="tab">
-        ❤
-        <h3>UHC</h3>
+        <div class="icon">☠</div>
+        <h2>SMP</h2>
     </div>
 
     <div class="tab">
-        🧪
-        <h3>Pot</h3>
-    </div>
-
-    <div class="tab">
-        ☠
-        <h3>SMP</h3>
+        <div class="icon">🔨</div>
+        <h2>Mace</h2>
     </div>
 
 </div>
 
+<!-- MAIN -->
+
 <div class="main">
+
+    <!-- LEADERBOARD -->
 
     <div class="board">
 
-        <div class="row">
+        <div class="headers">
 
-            <div class="rank">1.</div>
+            <div>#</div>
 
-            <div class="player">
-                <img src="https://mc-heads.net/avatar/Dream">
-                <div class="player-info">
-                    <h2>Dream</h2>
-                    <p>Combat Master (330 points)</p>
-                </div>
-            </div>
+            <div>PLAYER</div>
 
-            <div class="region na">NA</div>
+            <div>REGION</div>
 
-            <div class="tiers">
-
-                <div class="tier ht1">
-                    HT1
-                    <span>60</span>
-                </div>
-
-                <div class="tier lt1">
-                    LT1
-                    <span>45</span>
-                </div>
-
-                <div class="tier ht2">
-                    HT2
-                    <span>30</span>
-                </div>
-
-                <div class="tier lt2">
-                    LT2
-                    <span>15</span>
-                </div>
-
-            </div>
+            <div>TIERS (Points)</div>
 
         </div>
 
-        <div class="row">
+        <div class="empty">
 
-            <div class="rank">2.</div>
+            <h1>No Players Yet</h1>
 
-            <div class="player">
-                <img src="https://mc-heads.net/avatar/Technoblade">
-                <div class="player-info">
-                    <h2>Technoblade</h2>
-                    <p>Combat Master (300 points)</p>
-                </div>
-            </div>
-
-            <div class="region eu">EU</div>
-
-            <div class="tiers">
-
-                <div class="tier ht1">
-                    HT1
-                    <span>60</span>
-                </div>
-
-                <div class="tier ht3">
-                    HT3
-                    <span>10</span>
-                </div>
-
-                <div class="tier lt3">
-                    LT3
-                    <span>6</span>
-                </div>
-
-                <div class="tier lt5">
-                    LT5
-                    <span>1</span>
-                </div>
-
-            </div>
+            <p>
+                Players will appear here once added manually
+                through the website code.
+            </p>
 
         </div>
 
     </div>
 
+    <!-- SIDE PANEL -->
+
     <div class="side">
 
-        <h2>⭐ Tier Point Values</h2>
+        <div class="side-title">
+            ⭐ Tier Point Values
+        </div>
 
-        <div class="point"><div class="label">HT1</div><div>60 Points</div></div>
-        <div class="point"><div class="label">LT1</div><div>45 Points</div></div>
-        <div class="point"><div class="label">HT2</div><div>30 Points</div></div>
-        <div class="point"><div class="label">LT2</div><div>15 Points</div></div>
-        <div class="point"><div class="label">HT3</div><div>10 Points</div></div>
-        <div class="point"><div class="label">LT3</div><div>6 Points</div></div>
-        <div class="point"><div class="label">HT4</div><div>4 Points</div></div>
-        <div class="point"><div class="label">LT4</div><div>3 Points</div></div>
-        <div class="point"><div class="label">HT5</div><div>2 Points</div></div>
-        <div class="point"><div class="label">LT5</div><div>1 Point</div></div>
+        <div class="point">
+            <b class="ht1">HT1</b>
+            <span>60 Points</span>
+        </div>
+
+        <div class="point">
+            <b class="lt1">LT1</b>
+            <span>45 Points</span>
+        </div>
+
+        <div class="point">
+            <b class="ht2">HT2</b>
+            <span>30 Points</span>
+        </div>
+
+        <div class="point">
+            <b class="lt2">LT2</b>
+            <span>15 Points</span>
+        </div>
+
+        <div class="point">
+            <b class="ht3">HT3</b>
+            <span>10 Points</span>
+        </div>
+
+        <div class="point">
+            <b class="lt3">LT3</b>
+            <span>6 Points</span>
+        </div>
+
+        <div class="point">
+            <b class="ht4">HT4</b>
+            <span>4 Points</span>
+        </div>
+
+        <div class="point">
+            <b class="lt4">LT4</b>
+            <span>3 Points</span>
+        </div>
+
+        <div class="point">
+            <b class="ht5">HT5</b>
+            <span>2 Points</span>
+        </div>
+
+        <div class="point">
+            <b class="lt5">LT5</b>
+            <span>1 Point</span>
+        </div>
 
     </div>
 
