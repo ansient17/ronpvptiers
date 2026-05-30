@@ -488,22 +488,19 @@
     addBtn.disabled = true;
     addBtn.textContent = "Checking...";
     document.getElementById("addErr").textContent = "";
-    let resolvedName = name;
+    // Keep the name exactly as typed — don't let the API overwrite it.
+    // Only use the API to fetch the UUID for skin rendering; if it fails, add anyway.
     try {
       const r = await fetch(`https://api.ashcon.app/mojang/v2/user/${encodeURIComponent(name)}`);
-      if (r.status === 404) throw new Error("Not found");
-      const data = await r.json();
-      if (!data || !data.uuid) throw new Error("Invalid");
-      if (data.username) resolvedName = data.username;
-      uuidCache[resolvedName.toLowerCase()] = data.uuid.replace(/-/g, "");
+      if (r.ok) {
+        const data = await r.json();
+        if (data && data.uuid) uuidCache[name.toLowerCase()] = data.uuid.replace(/-/g, "");
+      }
     } catch(e) {
-      document.getElementById("addErr").textContent = `"${name}" is not a valid Minecraft account.`;
-      addBtn.disabled = false;
-      addBtn.textContent = "+ Add";
-      return;
+      // API unavailable — continue without UUID, skin will just be hidden
     }
     const newPlayer = {
-      name: resolvedName,
+      name: name,
       region: document.getElementById("newRegion").value,
       tiers: {
         Sword: document.getElementById("newSword").value || null,
@@ -512,7 +509,7 @@
         Mace: document.getElementById("newMace").value || null
       }
     };
-    const newDocRef = doc(collection(db, "players"), resolvedName.toLowerCase());
+    const newDocRef = doc(collection(db, "players"), name.toLowerCase());
     await setDoc(newDocRef, newPlayer);
     document.getElementById("newName").value = "";
     document.getElementById("newSword").value = "";
