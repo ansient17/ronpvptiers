@@ -10,12 +10,11 @@
 <!-- Firebase SDKs -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
   import { getFirestore, collection, doc, setDoc, deleteDoc, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-  // REPLACE WITH YOUR FIREBASE CONFIG
   const firebaseConfig = {
-    apiKey: "AIzaSyDXizCKjNllkPjVRSnufHN6J3AHuI7VxtE",
+    apiKey: "YOUR_API_KEY",
     authDomain: "ronsmpranked.firebaseapp.com",
     projectId: "ronsmpranked",
     storageBucket: "ronsmpranked.firebasestorage.app",
@@ -37,6 +36,8 @@
   window.firebaseDeleteDoc = deleteDoc;
   window.firebaseGetDocs = getDocs;
   window.firebaseOnSnapshot = onSnapshot;
+
+  // Move all your existing <script> code here, replacing this comment
 </script>
 
 <style>
